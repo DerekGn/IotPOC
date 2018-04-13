@@ -48,17 +48,18 @@ BaseType_t xParseJson(char *pcJson, xJsonNodeHandler_t xJsonNodeHandler)
 	return xRc;
 }
 
-void vJsonInit(char *pcBuffer, BaseType_t xBufferSize)
+void vJsonInit(JsonGenerator_t *pxGenerator, char *pcBuffer, BaseType_t xBufferSize)
 {
-	strcpy_s(pcBuffer, xBufferSize, "{");
+	pxGenerator->pcBuffer = pcBuffer;
+	strcpy_s(pxGenerator->pcBuffer, xBufferSize, "{");
 }
 
-void vJsonOpenKey(char *pcBuffer, BaseType_t xBufferSize, const char * pcName)
+void vJsonOpenKey(JsonGenerator_t *pxGenerator, const char * pcName)
 {
-	snprintf(pcBuffer + strlen(pcBuffer), xBufferSize, "\"%s\":", pcName);
+	snprintf(pxGenerator->pcBuffer + strlen(pxGenerator->pcBuffer), pxGenerator->xBufferSize, "\"%s\":", pcName);
 }
 
-void vJsonAddValue(char *pcBuffer, BaseType_t xBufferSize, ValueType_t xValueType, const char *pcValue)
+void vJsonAddValue(JsonGenerator_t *pxGenerator, eValueType_t xValueType, const char *pcValue)
 {
 	char cFormat[10];
 
@@ -87,10 +88,10 @@ void vJsonAddValue(char *pcBuffer, BaseType_t xBufferSize, ValueType_t xValueTyp
 		break;
 	}
 
-	snprintf(pcBuffer + strlen(pcBuffer), xBufferSize, cFormat, pcValue);
+	snprintf(pxGenerator->pcBuffer + strlen(pxGenerator->pcBuffer), pxGenerator->xBufferSize, cFormat, pcValue);
 }
 
-void vJsonCloseKey(char *pcBuffer, BaseType_t xBufferSize, ValueType_t xValueType)
+void vJsonCloseNode(JsonGenerator_t *pxGenerator, eValueType_t xValueType)
 {
 	char cDelimiter[3];
 
@@ -112,5 +113,5 @@ void vJsonCloseKey(char *pcBuffer, BaseType_t xBufferSize, ValueType_t xValueTyp
 		break;
 	}
 
-	strcat_s(pcBuffer, xBufferSize, cDelimiter);
+	strcat_s(pxGenerator->pcBuffer, pxGenerator->xBufferSize, cDelimiter);
 }

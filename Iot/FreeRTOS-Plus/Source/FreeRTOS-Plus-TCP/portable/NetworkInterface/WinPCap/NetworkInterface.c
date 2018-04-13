@@ -147,7 +147,7 @@ static void *pvSendEvent = NULL;
 
 /* _HT_ made the PCAP interface number configurable through the program's
 parameters in order to test in different machines. */
-static BaseType_t xConfigNextworkInterfaceToUse = configNETWORK_INTERFACE_TO_USE;
+BaseType_t xConfigNextworkInterfaceToUse = configNETWORK_INTERFACE_TO_USE;
 
 /* Handles to the Windows threads that handle the PCAP IO. */
 static HANDLE vWinPcapRecvThreadHandle = NULL;

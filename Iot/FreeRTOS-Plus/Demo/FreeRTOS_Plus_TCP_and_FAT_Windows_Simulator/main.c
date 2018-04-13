@@ -335,16 +335,24 @@ static HttpHandler_t xApiHandler = { "Api", xApiProcessHttpRequest };
 static HttpHandler_t xFileHandler = { "File", xFileProcessHttpRequest };
 static HttpHandler_t xSecHandler = { "Sec", xSecurityProcessHttpRequest };
 
+extern BaseType_t xConfigNextworkInterfaceToUse;
 /*-----------------------------------------------------------*/
 
 /*
  * NOTE: Some versions of Visual Studio will generate erroneous compiler
  * warnings about variables being used before they are set.
  */
-int main( void )
+int main(int argc, char **argv)
 {
 const uint32_t ulLongTime_ms = 250UL, ulCheckTimerPeriod_ms = 15000UL;
 TimerHandle_t xCheckTimer;
+
+if (argc < 1)
+{
+	printf("Network interface not specified as first argument");
+	return -1;
+}
+xConfigNextworkInterfaceToUse = atol(argv[1]);
 
 	/*
 	 * Instructions for using this project are provided on:
