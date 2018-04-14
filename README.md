@@ -112,7 +112,7 @@ Retrives a specified radios configuration. {0} is the Id of the radio from 0 ~ 3
 
 Retrives a specified radios settings. {0} is the Id of the radio from 0 ~ 3
 
-The settings will be different which is determined by the radio type 
+The settings will be different which is determined by the radio type
 
 #### PATCH /api/radio/{0}
 
