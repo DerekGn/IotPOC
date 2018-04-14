@@ -13,13 +13,13 @@
 #include "Json.h"
 #include "ApiHandlers.h"
 
-#define DEVICENAME "devicename"
+#define GATEWAYNAME "name"
 #define NICKNAME "nickname"
 
-static char cDeviceName[100] = "modiot";
+static char cName[100] = "modiot";
 static char cNickName[100] = "nick";
 
-BaseType_t xHandleDeviceJsonParse(char *pcJson, jsmntok_t *pxTokens, BaseType_t xTokensCount, BaseType_t *pxIndex)
+BaseType_t xHandleGatewayJsonParse(char *pcJson, jsmntok_t *pxTokens, BaseType_t xTokensCount, BaseType_t *pxIndex)
 {
 BaseType_t xResult = 0;
 BaseType_t xLen = 0;
@@ -32,8 +32,8 @@ char cKey[11];
 	{
 		if (i == 0)
 		{
-			strcpy(cKey, DEVICENAME);
-			pcValue = cDeviceName;
+			strcpy(cKey, GATEWAYNAME);
+			pcValue = cName;
 			xLen = 10;
 		}
 		else
@@ -62,7 +62,7 @@ char cKey[11];
 	return xResult;
 }
 
-void vHandleDeviceApi( HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xNumTokens )
+void vHandleGatewayApi( HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xNumTokens )
 {
 BaseType_t xCode = 0;
 
@@ -73,13 +73,13 @@ BaseType_t xCode = 0;
 	case ECMD_GET:
 			FreeRTOS_debug_printf( ( "%s: Handling GET\n", __func__ ) );
 			snprintf( pxClient->pxParent->pcCommandBuffer, sizeof( pxClient->pxParent->pcCommandBuffer ),
-				"{\"%s\": \"%s\", \"%s\": \"%s\" }", DEVICENAME, cDeviceName, NICKNAME, cNickName );
+				"{\"%s\": \"%s\", \"%s\": \"%s\" }", GATEWAYNAME, cName, NICKNAME, cNickName );
 			xSendApiResponse( pxClient );
 		break;
 	case ECMD_PATCH:
 			FreeRTOS_debug_printf( ( "%s: Handling PATCH\n", __func__ ) );
 
-			BaseType_t xRc = xParseJson( pcPayload, xHandleDeviceJsonParse );
+			BaseType_t xRc = xParseJson( pcPayload, xHandleGatewayJsonParse);
 
 			if (xRc > 0)
 			{

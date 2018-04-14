@@ -261,14 +261,14 @@
     <ClCompile Include="NetworkApiHandler.c">
       <Filter>ApiHandlers</Filter>
     </ClCompile>
-    <ClCompile Include="DeviceApiHandler.c">
-      <Filter>ApiHandlers</Filter>
-    </ClCompile>
     <ClCompile Include="RadioApiHandler.c">
       <Filter>ApiHandlers</Filter>
     </ClCompile>
     <ClCompile Include="Json.c">
       <Filter>Json</Filter>
+    </ClCompile>
+    <ClCompile Include="GatewayApiHandler.c">
+      <Filter>ApiHandlers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

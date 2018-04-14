@@ -81,17 +81,11 @@ BaseType_t xSettings;
 				vJsonCloseNode(&xGenerator, eObject);
 			}
 
-			/*if( xSettings)
+			if( xSettings)
 			{
-			}
-			else if( xDevice )
-			{
-			}
-			else
-			{
-				
-			}*/
 
+			}
+			
 			xSendApiResponse(pxClient);
 		}
 		else
