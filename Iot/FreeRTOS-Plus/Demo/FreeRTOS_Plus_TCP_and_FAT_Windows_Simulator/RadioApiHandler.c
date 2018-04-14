@@ -17,7 +17,7 @@
 #define DEVICES "devices"
 #define ENABLED "enabled"
 #define FAULTED "faulted"
-#define RADIOTYPE "typed"
+#define RADIOTYPE "type"
 
 typedef enum
 {
@@ -27,14 +27,18 @@ typedef enum
 	eISM
 } eRadioType;
 
-typedef struct 
+typedef struct
 {
 	BaseType_t xEnabled;
 	BaseType_t xFaulted;
 	eRadioType xType;
 } Radio_t;
 
-static BaseType_t prvParseRadioGet(const char *pcUrlData, BaseType_t *pxRadioId, BaseType_t *pxRadio, BaseType_t *pxSettings );
+static BaseType_t prvParseId(char *pcCurrent, BaseType_t *pxRadioId);
+
+static void prvAddRadio(JsonGenerator_t *pxGenerator, const Radio_t *pxRadio);
+
+static BaseType_t prvParseRadioGet(const char *pcUrlData, BaseType_t *pxRadioId, BaseType_t *pxRadio, BaseType_t *pxSettings);
 
 static Radio_t radios[radioConfigRADIO_COUNT] =
 {
@@ -44,21 +48,19 @@ static Radio_t radios[radioConfigRADIO_COUNT] =
 	{ 0, 0, 3 },
 };
 
-static void prvAddRadio(JsonGenerator_t *pxGenerator, const Radio_t *pxRadio);
-
-void vHandleRadioApi( HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xNumTokens )
+void vHandleRadioApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xNumTokens)
 {
-BaseType_t xCode = 0;
-BaseType_t xDeviceId;
-BaseType_t xDevice;
-BaseType_t xSettings;
+	BaseType_t xCode = 0;
+	BaseType_t xDeviceId;
+	BaseType_t xDevice;
+	BaseType_t xSettings;
 
 	switch (xIndex)
 	{
 	case ECMD_GET:
 		FreeRTOS_debug_printf(("%s: Handling GET\n", __func__));
 
-		if (prvParseRadioGet( pxClient->pcUrlData, &xDeviceId, &xDevice, &xSettings ))
+		if (prvParseRadioGet(pxClient->pcUrlData, &xDeviceId, &xDevice, &xSettings))
 		{
 			JsonGenerator_t xGenerator;
 
@@ -72,31 +74,33 @@ BaseType_t xSettings;
 
 				for (BaseType_t i = 0; i < radioConfigRADIO_COUNT; i++)
 				{
-					prvAddRadio(&xGenerator, &radios[0]);
-					
-					if(i < radioConfigRADIO_COUNT - 1)
+					prvAddRadio(&xGenerator, &radios[i]);
+
+					if (i < radioConfigRADIO_COUNT - 1)
+					{
 						vJsonCloseNode(&xGenerator, eValue);
+					}
 				}
 
 				vJsonCloseNode(&xGenerator, eArray);
 				vJsonCloseNode(&xGenerator, eObject);
-			} 
-			else  if( xSettings)
+			}
+			else if (xSettings)
 			{
 
 			}
-			else if (xDevice)
+			else
 			{
 				prvAddRadio(&xGenerator, &radios[xDeviceId]);
 			}
-			
+
 			xSendApiResponse(pxClient);
 		}
 		else
 		{
 			xCode = WEB_BAD_REQUEST;
 		}
-		
+
 		break;
 	default:
 		xCode = WEB_BAD_REQUEST;
@@ -109,14 +113,12 @@ BaseType_t xSettings;
 	}
 }
 
-
-static BaseType_t prvParseRadioGet(const char *pcUrlData, BaseType_t *pxRadioId, BaseType_t *pxRadio, BaseType_t *pxSettings)
+static BaseType_t prvParseRadioGet(char * pcUrlData, BaseType_t *pxRadioId, BaseType_t *pxRadio, BaseType_t *pxSettings)
 {
-char *pcStop;
-char *pcNext;
-char *pcCurrent = pcUrlData;
-BaseType_t xTokenCount = 0;
-BaseType_t xResult = pdTRUE;
+	char *pcNext;
+	char *pcCurrent = pcUrlData;
+	BaseType_t xTokenCount = 0;
+	BaseType_t xResult = pdTRUE;
 
 	*pxRadio = pdFALSE;
 	*pxSettings = pdFALSE;
@@ -127,23 +129,13 @@ BaseType_t xResult = pdTRUE;
 		{
 			if (xTokenCount == 2)
 			{
-				errno = 0;
-
-				*pxRadioId = strtol(pcCurrent, &pcStop, 10);
-
-				if (errno == ERANGE || pcCurrent == pcStop)
+				if (!prvParseId(pcCurrent, pxRadioId))
 				{
-					xResult = 0;
+					xResult = pdFALSE;
 					break;
 				}
 
-				if (*pxRadioId > radioConfigRADIO_COUNT)
-				{
-					xResult = 0;
-					break;
-				}
-
-				*pxRadio = 1;
+				*pxRadio = pdTRUE;
 			}
 
 			if (xTokenCount == 3)
@@ -159,6 +151,22 @@ BaseType_t xResult = pdTRUE;
 		}
 
 		pcCurrent = pcNext + 1;
+	}
+
+	if (*pcCurrent != '\0')
+	{
+		if (strcmp(pcCurrent, "radio") == 0)
+		{
+			xResult = pdTRUE;
+		}
+		else if (prvParseId(pcCurrent, pxRadioId))
+		{
+			*pxRadio = pdTRUE;
+		}
+		else
+		{
+			xResult = pdFALSE;
+		}
 	}
 
 	return xResult;
@@ -178,4 +186,15 @@ static void prvAddRadio(JsonGenerator_t *pxGenerator, const Radio_t *pxRadio)
 	vJsonOpenKey(pxGenerator, RADIOTYPE);
 	vJsonAddValue(pxGenerator, eNumber, cBuffer);
 	vJsonCloseNode(pxGenerator, eObject);
+}
+
+static BaseType_t prvParseId(char *pcCurrent, BaseType_t *pxRadioId)
+{
+	char *pcStop;
+
+	errno = 0;
+
+	*pxRadioId = strtol(pcCurrent, &pcStop, 10);
+
+	return !(errno == ERANGE || pcCurrent == pcStop);
 }

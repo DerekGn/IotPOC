@@ -51,6 +51,7 @@ BaseType_t xParseJson(char *pcJson, xJsonNodeHandler_t xJsonNodeHandler)
 void vJsonInit(JsonGenerator_t *pxGenerator, char *pcBuffer, BaseType_t xBufferSize)
 {
 	pxGenerator->pcBuffer = pcBuffer;
+	pxGenerator->pcBuffer[0] = '\0';
 }
 
 void vJsonOpenKey(JsonGenerator_t *pxGenerator, const char * pcName)
