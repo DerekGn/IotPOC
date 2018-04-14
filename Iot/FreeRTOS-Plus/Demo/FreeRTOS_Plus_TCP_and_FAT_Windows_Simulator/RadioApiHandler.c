@@ -34,7 +34,7 @@ typedef struct
 	eRadioType xType;
 } Radio_t;
 
-static BaseType_t prvParseDeviceGet(const char *pcUrlData, BaseType_t *pxDeviceId, BaseType_t *pxDevice, BaseType_t *pxSettings );
+static BaseType_t prvParseRadioGet(const char *pcUrlData, BaseType_t *pxRadioId, BaseType_t *pxRadio, BaseType_t *pxSettings );
 
 static Radio_t radios[radioConfigRADIO_COUNT] =
 {
@@ -58,7 +58,7 @@ BaseType_t xSettings;
 	case ECMD_GET:
 		FreeRTOS_debug_printf(("%s: Handling GET\n", __func__));
 
-		if (prvParseDeviceGet( pxClient->pcUrlData, &xDeviceId, &xDevice, &xSettings ))
+		if (prvParseRadioGet( pxClient->pcUrlData, &xDeviceId, &xDevice, &xSettings ))
 		{
 			JsonGenerator_t xGenerator;
 
@@ -66,6 +66,7 @@ BaseType_t xSettings;
 
 			if (!xDevice)
 			{
+				vJsonAddValue(&xGenerator, eObject, "");
 				vJsonOpenKey(&xGenerator, DEVICES);
 				vJsonAddValue(&xGenerator, eArray, "");
 
@@ -79,11 +80,14 @@ BaseType_t xSettings;
 
 				vJsonCloseNode(&xGenerator, eArray);
 				vJsonCloseNode(&xGenerator, eObject);
-			}
-
-			if( xSettings)
+			} 
+			else  if( xSettings)
 			{
 
+			}
+			else if (xDevice)
+			{
+				prvAddRadio(&xGenerator, &radios[xDeviceId]);
 			}
 			
 			xSendApiResponse(pxClient);
@@ -106,7 +110,7 @@ BaseType_t xSettings;
 }
 
 
-static BaseType_t prvParseDeviceGet(const char * pcUrlData, BaseType_t *pxDeviceId, BaseType_t *pxDevice, BaseType_t *pxSettings)
+static BaseType_t prvParseRadioGet(const char *pcUrlData, BaseType_t *pxRadioId, BaseType_t *pxRadio, BaseType_t *pxSettings)
 {
 char *pcStop;
 char *pcNext;
@@ -114,7 +118,7 @@ char *pcCurrent = pcUrlData;
 BaseType_t xTokenCount = 0;
 BaseType_t xResult = pdTRUE;
 
-	*pxDevice = pdFALSE;
+	*pxRadio = pdFALSE;
 	*pxSettings = pdFALSE;
 
 	while ((pcNext = strchr(pcCurrent, '/')) != NULL)
@@ -125,7 +129,7 @@ BaseType_t xResult = pdTRUE;
 			{
 				errno = 0;
 
-				*pxDeviceId = strtol(pcCurrent, &pcStop, 10);
+				*pxRadioId = strtol(pcCurrent, &pcStop, 10);
 
 				if (errno == ERANGE || pcCurrent == pcStop)
 				{
@@ -133,7 +137,13 @@ BaseType_t xResult = pdTRUE;
 					break;
 				}
 
-				*pxDevice = 1;
+				if (*pxRadioId > radioConfigRADIO_COUNT)
+				{
+					xResult = 0;
+					break;
+				}
+
+				*pxRadio = 1;
 			}
 
 			if (xTokenCount == 3)
