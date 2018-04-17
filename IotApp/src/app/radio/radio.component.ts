@@ -9,6 +9,8 @@ import { RadioConfig } from '../models/radioConfig';
 })
 export class RadioComponent implements OnInit {
 
+  selectedRadioConfig: RadioConfig;
+
   radioConfigs: RadioConfig[];
 
   constructor(private radioService: RadioService) { }
@@ -20,5 +22,9 @@ export class RadioComponent implements OnInit {
   getRadioConfig(): void {
     this.radioService.getRadioConfig()
         .subscribe(configs => this.radioConfigs = configs);
+  }
+
+  onSelect(radioConfig: RadioConfig): void {
+    this.selectedRadioConfig = radioConfig;
   }
 }
