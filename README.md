@@ -33,7 +33,7 @@ Can be used to update either the **devicename** or **nickname**
 
 ```json
 {
-    "devicename" : "",
+    "name" : "",
     "nickname" : ""
 }
 ```

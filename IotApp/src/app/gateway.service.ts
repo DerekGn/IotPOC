@@ -5,6 +5,10 @@ import { GatewayConfig } from './models/gatewayConfig';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
+
 @Injectable()
 export class GatewayService {
 
@@ -15,7 +19,13 @@ export class GatewayService {
   getGatewayConfig(): Observable<GatewayConfig> {
     return this.http.get<GatewayConfig>(this.gatewayUrl)
     .pipe(
-      catchError(this.handleError('getGatewayConfig',null))
+      catchError(this.handleError<any>('getGatewayConfig'))
+    );
+  }
+
+  updateGateway(gatewayConfig: GatewayConfig): Observable<any> {
+    return this.http.put(this.gatewayUrl, gatewayConfig, httpOptions).pipe(
+      catchError(this.handleError<any>('updateHero'))
     );
   }
 

@@ -21,4 +21,9 @@ export class GatewayComponent implements OnInit {
     this.gatewayService.getGatewayConfig()
         .subscribe(config => this.gatewayConfig = config);
   }
+
+  save(): void {
+    this.gatewayService.updateGateway(this.gatewayConfig)
+      .subscribe();
+  }
 }

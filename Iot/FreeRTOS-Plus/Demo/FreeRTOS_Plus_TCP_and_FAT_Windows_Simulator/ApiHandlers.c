@@ -38,6 +38,7 @@ BaseType_t xSendApiResponse(HTTPClient_t *pxClient)
 #endif
 		"Content-Type: application/json\r\n"
 		"Connection: keep-alive\r\n"
+		"Access-Control-Allow-Origin: *\r\n"
 		"%s\r\n"
 		"%s",
 		(int)200,
