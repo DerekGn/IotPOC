@@ -5,12 +5,12 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { GatewayComponent } from './gateway/gateway.component';
-import { GatewayService } from './gateway.service';
+import { GatewayService } from './services/gateway.service';
 import { AppRoutingModule } from './/app-routing.module';
 import { NetworkComponent } from './network/network.component';
 import { RadioComponent } from './radio/radio.component';
-import { NetworkService } from './network.service';
-import { RadioService } from './radio.service';
+import { NetworkService } from './services/network.service';
+import { RadioService } from './services/radio.service';
 
 
 @NgModule({

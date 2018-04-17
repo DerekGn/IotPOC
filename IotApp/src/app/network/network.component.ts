@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NetworkService } from '../network.service';
+import { NetworkService } from '../services/network.service';
 import { NetworkConfig } from '../models/networkConfig';
 
 @Component({

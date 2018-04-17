@@ -1,25 +1,25 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
-import { NetworkConfig } from './models/networkConfig';
+import { RadioConfig } from '../models/radioConfig';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 
 @Injectable()
-export class NetworkService {
+export class RadioService {
 
   constructor(private http: HttpClient) { }
 
-  private networkUrl = 'http://192.168.1.128/api/network';
+  private radioUrl = 'http://192.168.1.128/api/radio';
 
-  getNetworkConfig(): Observable<NetworkConfig> {
-    return this.http.get<NetworkConfig>(this.networkUrl)
+  getRadioConfig(): Observable<RadioConfig[]> {
+    return this.http.get<RadioConfig[]>(this.radioUrl)
     .pipe(
-      catchError(this.handleError<any>('getNetworkConfig'))
+      catchError(this.handleError<any>('getRadioConfig',[]))
     );
   }
 
-  /**
+    /**
   * Handle Http operation that failed.
   * Let the app continue.
   * @param operation - name of the operation that failed

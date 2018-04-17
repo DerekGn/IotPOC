@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GatewayService } from '../gateway.service';
+import { GatewayService } from '../services/gateway.service';
 import { GatewayConfig } from '../models/gatewayConfig';
 
 @Component({
