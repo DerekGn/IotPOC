@@ -1,4 +1,4 @@
-<h2>Gateway Name Configuration</h2>
+<h2>Gateway Configuration</h2>
 <div>
     <label>Name:
         <input [(ngModel)]="gateway.name" placeholder="name">
@@ -8,4 +8,7 @@
     <label>Nickname:
         <input [(ngModel)]="gateway.nickname" placeholder="nickname">
     </label>
+</div>
+<div>
+    <button (click)="save()">save</button>
 </div>

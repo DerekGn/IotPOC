@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GatewayService } from '../gateway.service';
-import { GatewayConfig } from './gatewayConfig';
+import { GatewayConfig } from '../models/gatewayConfig';
 
 @Component({
   selector: 'app-gateway',
