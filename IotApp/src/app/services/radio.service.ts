@@ -13,8 +13,9 @@ export class RadioService {
   private radioUrl = 'http://192.168.1.128/api/radio';
 
   getRadioConfig(): Observable<RadioConfig[]> {
-    return this.http.get<RadioConfig[]>(this.radioUrl)
+    return this.http.get<{ radios:RadioConfig[]}>(this.radioUrl)
     .pipe(
+      map( response => response.radios ),
       catchError(this.handleError<any>('getRadioConfig',[]))
     );
   }
