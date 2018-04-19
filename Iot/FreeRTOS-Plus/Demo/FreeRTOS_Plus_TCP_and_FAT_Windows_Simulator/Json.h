@@ -33,8 +33,11 @@ typedef BaseType_t(*xJsonNodeHandler_t) ( char *pcJson, jsmntok_t *pxTokens, Bas
 BaseType_t xParseJson( char *pcJson, xJsonNodeHandler_t xJsonNodeHandler );
 
 void vJsonInit(JsonGenerator_t *pxGenerator, char *pcBuffer, BaseType_t xBufferSize);
+
 void vJsonOpenKey(JsonGenerator_t *pxGenerator, const char *pcName);
+
 void vJsonAddValue(JsonGenerator_t *pxGenerator, eValueType_t xValueType, const char *pcValue);
+
 void vJsonCloseNode(JsonGenerator_t *pxGenerator, eValueType_t xValueType);
 
 #endif /* JSON_H */
