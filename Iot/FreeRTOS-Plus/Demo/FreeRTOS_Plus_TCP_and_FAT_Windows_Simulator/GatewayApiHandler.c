@@ -72,8 +72,17 @@ BaseType_t xCode = 0;
 	{
 	case ECMD_GET:
 			FreeRTOS_debug_printf( ( "%s: Handling GET\n", __func__ ) );
-			snprintf( pxClient->pxParent->pcCommandBuffer, sizeof( pxClient->pxParent->pcCommandBuffer ),
-				"{\"%s\": \"%s\", \"%s\": \"%s\" }", GATEWAYNAME, cName, NICKNAME, cNickName );
+
+			JsonGenerator_t xGenerator;
+
+			vJsonInit(&xGenerator, pxClient->pxParent->pcCommandBuffer, sizeof(pxClient->pxParent->pcCommandBuffer));
+			vJsonAddValue(&xGenerator, eObject, "");
+			vJsonOpenKey(&xGenerator, GATEWAYNAME);
+			vJsonAddValue(&xGenerator, eString, cName);
+			vJsonCloseNode(&xGenerator, eString);
+			vJsonOpenKey(&xGenerator, NICKNAME);
+			vJsonAddValue(&xGenerator, eString, cNickName);
+			vJsonCloseNode(&xGenerator, eObject);
 			xSendApiResponse( pxClient );
 		break;
 	case ECMD_PATCH:

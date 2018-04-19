@@ -10,6 +10,7 @@
 #include "FreeRTOS_HTTP_commands.h"
 
 #include "jsmn.h"
+#include "Json.h"
 #include "ApiHandlers.h"
 
 #define NETMASK		"networkmask"
@@ -24,8 +25,7 @@ static const char* prvMacToJsonArray(char *pcBuffer, const uint8_t *pucMacAddres
 void vHandleNetworkApi( HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xNumTokens )
 {
 uint32_t ulIPAddress, ulNetMask, ulGatewayAddress, ulDNSServerAddress;
-char cBuffer[4][33];
-char cMacBuffer[49];
+char cBuffer[49];
 BaseType_t xCode = 0;
 
 	strcpy(pxClient->pxParent->pcExtraContents, "Content-Length: 0\r\n");
@@ -35,13 +35,22 @@ BaseType_t xCode = 0;
 		case ECMD_GET:
 			FreeRTOS_debug_printf(("%s: Handling GET\n", __func__));
 			FreeRTOS_GetAddressConfiguration(&ulIPAddress, &ulNetMask, &ulGatewayAddress, &ulDNSServerAddress);
-			snprintf(pxClient->pxParent->pcCommandBuffer, sizeof(pxClient->pxParent->pcCommandBuffer),
-				"{\"%s\": [%s], \"%s\": [%s], \"%s\": [%s],\"%s\": [%s], \"%s\": [%s] }", 
-				IPADDRESS, prvIPv4ToJsonArray(cBuffer[0], ulIPAddress), 
-				NETMASK, prvIPv4ToJsonArray(cBuffer[1], ulNetMask),
-				GWADDR, prvIPv4ToJsonArray(cBuffer[2], ulGatewayAddress),
-				DNSADDR, prvIPv4ToJsonArray(cBuffer[3], ulDNSServerAddress),
-				MACADDR, prvMacToJsonArray(cMacBuffer, FreeRTOS_GetMACAddress()));
+
+			JsonGenerator_t xGenerator;
+
+			vJsonInit(&xGenerator, pxClient->pxParent->pcCommandBuffer, sizeof(pxClient->pxParent->pcCommandBuffer));
+			vJsonAddValue(&xGenerator, eObject, "");
+			vJsonOpenKey(&xGenerator, IPADDRESS);
+			vJsonAddValue(&xGenerator, eArray, prvIPv4ToJsonArray(cBuffer, ulIPAddress));
+			vJsonOpenKey(&xGenerator, NETMASK);
+			vJsonAddValue(&xGenerator, eArray, prvIPv4ToJsonArray(cBuffer, ulNetMask));
+			vJsonOpenKey(&xGenerator, GWADDR);
+			vJsonAddValue(&xGenerator, eArray, prvIPv4ToJsonArray(cBuffer, ulGatewayAddress));
+			vJsonOpenKey(&xGenerator, DNSADDR);
+			vJsonAddValue(&xGenerator, eArray, prvIPv4ToJsonArray(cBuffer, ulDNSServerAddress));
+			vJsonOpenKey(&xGenerator, MACADDR);
+			vJsonAddValue(&xGenerator, eArray, prvMacToJsonArray(cBuffer, FreeRTOS_GetMACAddress()));
+
 			xSendApiResponse(pxClient);
 			break;
 		case ECMD_PATCH:
