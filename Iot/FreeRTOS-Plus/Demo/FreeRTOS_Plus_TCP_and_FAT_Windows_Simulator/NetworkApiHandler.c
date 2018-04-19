@@ -22,7 +22,7 @@
 static const char* prvIPv4ToJsonArray(char *pcBuffer, uint32_t ulAddress);
 static const char* prvMacToJsonArray(char *pcBuffer, const uint8_t *pucMacAddress);
 
-void vHandleNetworkApi( HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xNumTokens )
+void vHandleNetworkApi( HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount)
 {
 uint32_t ulIPAddress, ulNetMask, ulGatewayAddress, ulDNSServerAddress;
 char cBuffer[49];

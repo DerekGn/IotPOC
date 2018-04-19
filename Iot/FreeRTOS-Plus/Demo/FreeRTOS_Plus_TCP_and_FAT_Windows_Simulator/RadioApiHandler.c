@@ -48,7 +48,7 @@ static Radio_t radios[radioConfigRADIO_COUNT] =
 	{ 0, 0, 3 },
 };
 
-void vHandleRadioApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xNumTokens)
+void vHandleRadioApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount)
 {
 	BaseType_t xCode = 0;
 	BaseType_t xDeviceId;

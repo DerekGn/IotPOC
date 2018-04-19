@@ -62,7 +62,7 @@ char cKey[11];
 	return xResult;
 }
 
-void vHandleGatewayApi( HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xNumTokens )
+void vHandleGatewayApi( HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount )
 {
 BaseType_t xCode = 0;
 
@@ -87,17 +87,17 @@ BaseType_t xCode = 0;
 		break;
 	case ECMD_PATCH:
 			FreeRTOS_debug_printf( ( "%s: Handling PATCH\n", __func__ ) );
+			
+			//BaseType_t xRc = xParseJson( pcPayload, xHandleGatewayJsonParse);
 
-			BaseType_t xRc = xParseJson( pcPayload, xHandleGatewayJsonParse);
-
-			if (xRc > 0)
-			{
-				xCode = WEB_REPLY_OK;
-			}
-			else
-			{
-				xCode = WEB_BAD_REQUEST;
-			}
+			//if (xRc > 0)
+			//{
+			//	xCode = WEB_REPLY_OK;
+			//}
+			//else
+			//{
+			//	xCode = WEB_BAD_REQUEST;
+			//}
 		break;
 	default:
 			xCode = WEB_BAD_REQUEST;
