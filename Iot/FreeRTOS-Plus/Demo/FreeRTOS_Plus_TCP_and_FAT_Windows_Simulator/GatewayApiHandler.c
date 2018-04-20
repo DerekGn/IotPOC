@@ -4,6 +4,7 @@
 /* FreeRTOS+TCP includes. */
 #include "FreeRTOS_IP.h"
 #include "FreeRTOS_Sockets.h"
+#include "FreeRTOS_TCP_server.h"
 #include "FreeRTOS_server_private.h"
 
 #include "FreeRTOS_HTTP_io.h"

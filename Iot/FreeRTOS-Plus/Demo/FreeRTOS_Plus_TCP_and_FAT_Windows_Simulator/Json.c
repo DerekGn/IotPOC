@@ -36,7 +36,7 @@ void vJsonAddValue(JsonGenerator_t *pxGenerator, eValueType_t xValueType, const 
 		strcpy_s(cFormat, 10, "[%s");
 		break;
 	case eTrue:
-		strcpy_s(cFormat, 10, "true");
+		strcpy(cFormat, "true");
 		break;
 	case eFalse:
 		strcpy_s(cFormat, 10, "false");
@@ -74,7 +74,7 @@ void vJsonCloseNode(JsonGenerator_t *pxGenerator, eValueType_t xValueType)
 	strcat_s(pxGenerator->pcBuffer, pxGenerator->xBufferSize, cDelimiter);
 }
 
-BaseType_t xProcessPatchDocument(char *pcJson, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount, xProcessPatch_t xProcessPatch)
+eProcessPatchResult xProcessPatchDocument(char *pcJson, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount, xProcessPatch_t xProcessPatch)
 {
 	unsigned char ucOffset = 1;
 	jsmntok_t *pxPathToken = 0;
@@ -91,7 +91,7 @@ BaseType_t xProcessPatchDocument(char *pcJson, jsmntok_t *pxTokens, BaseType_t x
 		{
 			for (unsigned char i = 0; i < pxTokens[0].size; i++)
 			{
-				xResult = (eProcessPatchResult)xParsePatchOperation(pcJson, &pxTokens[ucOffset + i], &xOperation, &pxPathToken, &pxValueToken, &pxFromToken);
+				xResult = xParsePatchOperation(pcJson, &pxTokens[ucOffset + i], &xOperation, &pxPathToken, &pxValueToken, &pxFromToken);
 
 				if (xResult != eProcessed)
 				{

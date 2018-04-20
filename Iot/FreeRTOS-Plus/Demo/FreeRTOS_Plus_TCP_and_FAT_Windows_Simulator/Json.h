@@ -57,7 +57,7 @@ void vJsonAddValue(JsonGenerator_t *pxGenerator, eValueType_t xValueType, const 
 
 void vJsonCloseNode(JsonGenerator_t *pxGenerator, eValueType_t xValueType);
 
-BaseType_t xProcessPatchDocument(char *pcJson, jsmntok_t * pxTokens, BaseType_t xJsonTokenCount, xProcessPatch_t xProcessPatch);
+eProcessPatchResult xProcessPatchDocument(char *pcJson, jsmntok_t * pxTokens, BaseType_t xJsonTokenCount, xProcessPatch_t xProcessPatch);
 
 BaseType_t xParsePatchOperation(char * pcJson, jsmntok_t * pxTokens, eOperationType_t *pxOperation, jsmntok_t **pxPathToken, jsmntok_t **pxValueToken, jsmntok_t **pxFromToken);
 
