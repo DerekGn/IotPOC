@@ -19,52 +19,11 @@
 static char cName[100] = "modiot";
 static char cNickName[100] = "nick";
 
-BaseType_t xHandleGatewayJsonParse(char *pcJson, jsmntok_t *pxTokens, BaseType_t xTokensCount, BaseType_t *pxIndex)
-{
-BaseType_t xResult = 0;
-BaseType_t xLen = 0;
-char *pcValue = NULL;
-char cKey[11];
-
-	(xTokensCount);
-
-	for (size_t i = 0; i < 2; i++)
-	{
-		if (i == 0)
-		{
-			strcpy(cKey, GATEWAYNAME);
-			pcValue = cName;
-			xLen = 10;
-		}
-		else
-		{
-			strcpy(cKey, NICKNAME);
-			pcValue = cNickName;
-			xLen = 8;
-		}
-
-		if (strncmp(pcJson + pxTokens[*pxIndex].start, cKey, xLen) == 0)
-		{
-			if (pxTokens[*pxIndex].size == 1)
-			{
-				(*pxIndex)++;
-				strncpy(pcValue, pcJson + pxTokens[*pxIndex].start, pxTokens[*pxIndex].end - pxTokens[*pxIndex].start);
-				pcValue[pxTokens[*pxIndex].end - pxTokens[*pxIndex].start] = '\0';
-				break;
-			}
-			else
-			{
-				xResult = eJsonInvalidPair;
-			}
-		}
-	}
-
-	return xResult;
-}
+static BaseType_t xProcessPatchOperation(char *pcJson, eOperationType_t xOperation, jsmntok_t *pxPathToken, jsmntok_t *pxValueToken, jsmntok_t *pxFromToken);
 
 void vHandleGatewayApi( HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount )
 {
-BaseType_t xCode = 0;
+BaseType_t xCode = WEB_BAD_REQUEST;
 
 	strcpy(pxClient->pxParent->pcExtraContents, "Content-Length: 0\r\n");
 
@@ -83,29 +42,44 @@ BaseType_t xCode = 0;
 			vJsonOpenKey(&xGenerator, NICKNAME);
 			vJsonAddValue(&xGenerator, eString, cNickName);
 			vJsonCloseNode(&xGenerator, eObject);
+			
+			xCode = WEB_REPLY_OK;
 			xSendApiResponse( pxClient );
 		break;
 	case ECMD_PATCH:
 			FreeRTOS_debug_printf( ( "%s: Handling PATCH\n", __func__ ) );
-			
-			//BaseType_t xRc = xParseJson( pcPayload, xHandleGatewayJsonParse);
 
-			//if (xRc > 0)
-			//{
-			//	xCode = WEB_REPLY_OK;
-			//}
-			//else
-			//{
-			//	xCode = WEB_BAD_REQUEST;
-			//}
-		break;
-	default:
-			xCode = WEB_BAD_REQUEST;
+			BaseType_t xResult = xProcessPatchDocument( pcPayload, pxTokens, xJsonTokenCount, xProcessPatchOperation );
+
+			if(xResult == eProcessed)
+			{
+				// TODO apply settings when all processing is complete
+
+				xCode = WEB_REPLY_OK;
+			}
 		break;
 	}
 
-	if (xCode != 0)
+	if (xCode != WEB_BAD_REQUEST)
 	{
 		xSendReply( pxClient, xCode );
 	}
+}
+
+static BaseType_t xProcessPatchOperation(char * pcJson, eOperationType_t xOperation, jsmntok_t *pxPathToken, jsmntok_t *pxValueToken, jsmntok_t *pxFromToken)
+{
+	if (xOperation == eReplace)
+	{
+		if(strncmp(pcJson + pxPathToken->start, GATEWAYNAME, pxPathToken->end - pxPathToken->start) == 0)
+		{
+			strncpy_s(cName, 100, pcJson + pxValueToken->start, pxValueToken->end - pxValueToken->start);
+		}
+		else if (strncmp(pcJson + pxPathToken->start, NICKNAME, pxPathToken->end - pxPathToken->start) == 0)
+		{
+			strncpy_s(cNickName, 100, pcJson + pxValueToken->start, pxValueToken->end - pxValueToken->start);
+		}
+
+		return pdTRUE;
+	}
+	return pdFALSE;
 }

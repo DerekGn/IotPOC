@@ -1,6 +1,7 @@
 #include "ApiHandlers.h"
 
 #include "FreeRTOS_IP.h"
+#include "FreeRTOS_HTTP_commands.h"
 
 extern void vHandleGatewayApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount);
 

@@ -5,6 +5,16 @@
 
 typedef enum
 {
+	eAdd,
+	eRemove,
+	eReplace,
+	eMove,
+	eCopy,
+	eTest
+} eOperationType_t;
+
+typedef enum
+{
 	eValue,
 	eString,
 	eNumber,
@@ -28,9 +38,16 @@ typedef struct
 	BaseType_t xBufferSize;
 } JsonGenerator_t;
 
-typedef BaseType_t(*xJsonNodeHandler_t) ( char *pcJson, jsmntok_t *pxTokens, BaseType_t xTokensCount, BaseType_t *pxIndex );
+typedef enum
+{
+	eProcessed,
+	eInvalidNode,
+	eInvalidOp,
+	eMissingTokens,
+	eProcessingFailed
+} eProcessPatchResult;
 
-BaseType_t xParseJson( char *pcJson, xJsonNodeHandler_t xJsonNodeHandler );
+typedef BaseType_t(*xProcessPatch_t) (char *pcJson, eOperationType_t xOperation, jsmntok_t *pxPathToken, jsmntok_t *pxValueToken, jsmntok_t *pxFromToken);
 
 void vJsonInit(JsonGenerator_t *pxGenerator, char *pcBuffer, BaseType_t xBufferSize);
 
@@ -39,5 +56,9 @@ void vJsonOpenKey(JsonGenerator_t *pxGenerator, const char *pcName);
 void vJsonAddValue(JsonGenerator_t *pxGenerator, eValueType_t xValueType, const char *pcValue);
 
 void vJsonCloseNode(JsonGenerator_t *pxGenerator, eValueType_t xValueType);
+
+BaseType_t xProcessPatchDocument(char *pcJson, jsmntok_t * pxTokens, BaseType_t xJsonTokenCount, xProcessPatch_t xProcessPatch);
+
+BaseType_t xParsePatchOperation(char * pcJson, jsmntok_t * pxTokens, eOperationType_t *pxOperation, jsmntok_t **pxPathToken, jsmntok_t **pxValueToken, jsmntok_t **pxFromToken);
 
 #endif /* JSON_H */

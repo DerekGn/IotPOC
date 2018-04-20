@@ -6,48 +6,6 @@
 #include "jsmn.h"
 #include "Json.h"
 
-BaseType_t xParseJson(char *pcJson, xJsonNodeHandler_t xJsonNodeHandler)
-{
-	jsmn_parser xParser;
-	jsmntok_t xTokens[10];
-
-	jsmn_init(&xParser);
-
-	BaseType_t xRc = jsmn_parse(&xParser, pcJson, strlen(pcJson), xTokens, 10);
-
-	if (xRc == 0)
-	{
-		xRc = eJsonEmpty;
-	}
-	else
-	{
-		BaseType_t i = 1;
-
-		while (i < xRc)
-		{
-			if (i == 0 && xTokens[0].type != JSMN_OBJECT)
-			{
-				xRc = eJsonInvalidStartCount;
-				break;
-			}
-			else if (xTokens[i].type == JSMN_STRING)
-			{
-				BaseType_t xProcess = xJsonNodeHandler(pcJson, xTokens, xRc, &i) < 0;
-
-				if (xProcess < 0)
-				{
-					xRc = xProcess;
-					break;
-				}
-			}
-
-			i++;
-		}
-	}
-
-	return xRc;
-}
-
 void vJsonInit(JsonGenerator_t *pxGenerator, char *pcBuffer, BaseType_t xBufferSize)
 {
 	pxGenerator->pcBuffer = pcBuffer;
@@ -114,4 +72,138 @@ void vJsonCloseNode(JsonGenerator_t *pxGenerator, eValueType_t xValueType)
 	}
 
 	strcat_s(pxGenerator->pcBuffer, pxGenerator->xBufferSize, cDelimiter);
+}
+
+BaseType_t xProcessPatchDocument(char *pcJson, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount, xProcessPatch_t xProcessPatch)
+{
+	unsigned char ucOffset = 1;
+	jsmntok_t *pxPathToken = 0;
+	jsmntok_t *pxFromToken = 0;
+	jsmntok_t *pxValueToken = 0;
+	eOperationType_t xOperation;
+	eProcessPatchResult xResult;
+
+	char cBuffer[100];
+
+	if (xJsonTokenCount > 0)
+	{
+		if (pxTokens[0].type == JSMN_ARRAY)
+		{
+			for (unsigned char i = 0; i < pxTokens[0].size; i++)
+			{
+				xResult = (eProcessPatchResult)xParsePatchOperation(pcJson, &pxTokens[ucOffset + i], &xOperation, &pxPathToken, &pxValueToken, &pxFromToken);
+
+				if (xResult != eProcessed)
+				{
+					return xResult;
+				}
+
+				ucOffset += 5;
+
+				switch (xOperation)
+				{
+				case eAdd:
+				case eReplace:
+				case eTest:
+					if (!pxPathToken || !pxValueToken)
+						return eMissingTokens;
+
+					ucOffset += 2;
+					break;
+				case eMove:
+				case eCopy:
+					if (!pxPathToken || !pxFromToken)
+						return eMissingTokens;
+
+					ucOffset += 2;
+					break;
+				case eRemove:
+					if (!pxPathToken)
+						return eMissingTokens;
+					break;
+				}
+
+				if (!xProcessPatch(pcJson, xOperation, pxPathToken, pxValueToken, pxFromToken))
+				{
+					return eProcessingFailed;
+				}
+			}
+		}
+	}
+
+	return eProcessed;
+}
+
+BaseType_t xParsePatchOperation(char * pcJson, jsmntok_t * pxTokens, eOperationType_t *pxOperation, jsmntok_t **pxPathToken, jsmntok_t **pxValueToken, jsmntok_t **pxFromToken)
+{
+	if (pxTokens[0].type == JSMN_OBJECT && pxTokens[0].size >= 2)
+	{
+		unsigned char ucMaxCount = 6;
+		unsigned char ucIndex = 0;
+
+		do
+		{
+			if (pxTokens[++ucIndex].type != JSMN_STRING)
+			{
+				return eInvalidNode;
+			}
+
+			char *pStr = pcJson + pxTokens[ucIndex].start;
+			unsigned char ucLen = pxTokens[ucIndex].end - pxTokens[ucIndex].start;
+
+			if (strncmp(pStr, "op", ucLen) == 0)
+			{
+				ucIndex++;
+
+				pStr = pcJson + pxTokens[ucIndex].start;
+				ucLen = pxTokens[ucIndex].end - pxTokens[ucIndex].start;
+
+				if (_strnicmp(pStr, "add", ucLen) == 0)
+				{
+					*pxOperation = eAdd;
+				}
+				else if (_strnicmp(pStr, "remove", ucLen) == 0)
+				{
+					*pxOperation = eRemove;
+					ucMaxCount = 4;
+				}
+				else if (_strnicmp(pStr, "replace", ucLen) == 0)
+				{
+					*pxOperation = eReplace;
+				}
+				else if (_strnicmp(pStr, "move", ucLen) == 0)
+				{
+					*pxOperation = eMove;
+				}
+				else if (_strnicmp(pStr, "copy", ucLen) == 0)
+				{
+					*pxOperation = eCopy;
+				}
+				else if (_strnicmp(pStr, "test", ucLen) == 0)
+				{
+					*pxOperation = eTest;
+				}
+				else
+				{
+					return eInvalidOp;
+				}
+			}
+			else if (strncmp(pStr, "path", ucLen) == 0)
+			{
+				*pxPathToken = &pxTokens[++ucIndex];
+			}
+			else if (strncmp(pStr, "value", ucLen) == 0)
+			{
+				*pxValueToken = &pxTokens[++ucIndex];
+			}
+			else if (strncmp(pStr, "from", ucLen) == 0)
+			{
+				*pxFromToken = &pxTokens[++ucIndex];
+			}
+
+		} while (ucIndex < ucMaxCount);
+
+	}
+
+	return eProcessed;
 }

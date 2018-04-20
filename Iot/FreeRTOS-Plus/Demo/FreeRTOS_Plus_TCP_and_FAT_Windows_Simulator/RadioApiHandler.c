@@ -34,7 +34,7 @@ typedef struct
 	eRadioType xType;
 } Radio_t;
 
-static BaseType_t prvParseId(char *pcCurrent, BaseType_t *pxRadioId);
+static BaseType_t prvParseId(const char *pcCurrent, BaseType_t *pxRadioId);
 
 static void prvAddRadio(JsonGenerator_t *pxGenerator, const Radio_t *pxRadio);
 
@@ -50,10 +50,10 @@ static Radio_t radios[radioConfigRADIO_COUNT] =
 
 void vHandleRadioApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount)
 {
-	BaseType_t xCode = 0;
-	BaseType_t xDeviceId;
-	BaseType_t xDevice;
-	BaseType_t xSettings;
+BaseType_t xCode = WEB_BAD_REQUEST;
+BaseType_t xDeviceId;
+BaseType_t xDevice;
+BaseType_t xSettings;
 
 	switch (xIndex)
 	{
@@ -87,36 +87,43 @@ void vHandleRadioApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload,
 			}
 			else if (xSettings)
 			{
-
+				//TODO 
 			}
 			else
 			{
 				prvAddRadio(&xGenerator, &radios[xDeviceId]);
 			}
 
+			xCode = WEB_REPLY_OK;
 			xSendApiResponse(pxClient);
 		}
-		else
-		{
-			xCode = WEB_BAD_REQUEST;
-		}
-
+		
 		break;
-	default:
-		xCode = WEB_BAD_REQUEST;
+	case ECMD_PATCH:
+		FreeRTOS_debug_printf(("%s: Handling PATCH\n", __func__));
+		if (prvParseRadioGet(pxClient->pcUrlData, &xDeviceId, &xDevice, &xSettings))
+		{
+			if (xSettings)
+			{
+			}
+			else if (xDevice)
+			{
+
+			}
+		}
 		break;
 	}
 
-	if (xCode != 0)
+	if (xCode != WEB_REPLY_OK)
 	{
 		xSendReply(pxClient, xCode);
 	}
 }
 
-static BaseType_t prvParseRadioGet(char * pcUrlData, BaseType_t *pxRadioId, BaseType_t *pxRadio, BaseType_t *pxSettings)
+static BaseType_t prvParseRadioGet(const char *pcUrlData, BaseType_t *pxRadioId, BaseType_t *pxRadio, BaseType_t *pxSettings)
 {
 	char *pcNext;
-	char *pcCurrent = pcUrlData;
+	const char *pcCurrent = pcUrlData;
 	BaseType_t xTokenCount = 0;
 	BaseType_t xResult = pdTRUE;
 
@@ -175,7 +182,7 @@ static BaseType_t prvParseRadioGet(char * pcUrlData, BaseType_t *pxRadioId, Base
 static void prvAddRadio(JsonGenerator_t *pxGenerator, const Radio_t *pxRadio)
 {
 	char cBuffer[2];
-	itoa(pxRadio->xType, cBuffer, 10);
+	_itoa(pxRadio->xType, cBuffer, 10);
 	vJsonAddValue(pxGenerator, eObject, "");
 	vJsonOpenKey(pxGenerator, ENABLED);
 	vJsonAddValue(pxGenerator, pxRadio->xEnabled ? eTrue : eFalse, "");
@@ -188,7 +195,7 @@ static void prvAddRadio(JsonGenerator_t *pxGenerator, const Radio_t *pxRadio)
 	vJsonCloseNode(pxGenerator, eObject);
 }
 
-static BaseType_t prvParseId(char *pcCurrent, BaseType_t *pxRadioId)
+static BaseType_t prvParseId(const char *pcCurrent, BaseType_t *pxRadioId)
 {
 	char *pcStop;
 

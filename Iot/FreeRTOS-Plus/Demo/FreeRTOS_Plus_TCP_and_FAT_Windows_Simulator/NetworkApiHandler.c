@@ -24,9 +24,9 @@ static const char* prvMacToJsonArray(char *pcBuffer, const uint8_t *pucMacAddres
 
 void vHandleNetworkApi( HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount)
 {
+BaseType_t xCode = WEB_BAD_REQUEST;
 uint32_t ulIPAddress, ulNetMask, ulGatewayAddress, ulDNSServerAddress;
 char cBuffer[49];
-BaseType_t xCode = 0;
 
 	strcpy(pxClient->pxParent->pcExtraContents, "Content-Length: 0\r\n");
 
@@ -50,17 +50,13 @@ BaseType_t xCode = 0;
 			vJsonAddValue(&xGenerator, eArray, prvIPv4ToJsonArray(cBuffer, ulDNSServerAddress));
 			vJsonOpenKey(&xGenerator, MACADDR);
 			vJsonAddValue(&xGenerator, eArray, prvMacToJsonArray(cBuffer, FreeRTOS_GetMACAddress()));
-
+			
+			xCode = WEB_REPLY_OK;
 			xSendApiResponse(pxClient);
-			break;
-		case ECMD_PATCH:
-			break;
-		default:
-			xCode = WEB_BAD_REQUEST;
 			break;
 	}
 
-	if (xCode != 0)
+	if (xCode != WEB_BAD_REQUEST)
 	{
 		xSendReply(pxClient, xCode);
 	}
