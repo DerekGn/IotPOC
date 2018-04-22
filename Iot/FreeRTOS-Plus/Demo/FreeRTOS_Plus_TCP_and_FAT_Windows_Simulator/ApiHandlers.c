@@ -55,3 +55,14 @@ BaseType_t xSendApiResponse(HTTPClient_t *pxClient)
 
 	return xRc;
 }
+
+BaseType_t xParseId(const char *pcCurrent, BaseType_t *pxId)
+{
+	char *pcStop;
+
+	errno = 0;
+
+	*pxId = strtol(pcCurrent, &pcStop, 10);
+
+	return !(errno == ERANGE || pcCurrent == pcStop);
+}

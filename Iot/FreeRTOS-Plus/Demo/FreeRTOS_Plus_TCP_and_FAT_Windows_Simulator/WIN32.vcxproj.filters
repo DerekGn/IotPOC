@@ -270,6 +270,9 @@
     <ClCompile Include="GatewayApiHandler.c">
       <Filter>ApiHandlers</Filter>
     </ClCompile>
+    <ClCompile Include="ThingApiHandler.c">
+      <Filter>ApiHandlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\FreeRTOS-Plus-TCP\include\NetworkInterface.h">

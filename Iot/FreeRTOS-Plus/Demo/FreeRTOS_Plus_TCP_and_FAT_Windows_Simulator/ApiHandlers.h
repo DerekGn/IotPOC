@@ -23,4 +23,7 @@ BaseType_t xApiHandlerEntries( void );
 
 BaseType_t xSendApiResponse(HTTPClient_t *pxClient);
 
+BaseType_t xParseId(const char *pcCurrent, BaseType_t *pxId);
+
+
 #endif /* API_HANDLER_H */

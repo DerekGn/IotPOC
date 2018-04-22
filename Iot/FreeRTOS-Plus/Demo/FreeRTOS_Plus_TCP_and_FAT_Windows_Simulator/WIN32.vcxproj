@@ -206,6 +206,7 @@
     <ClCompile Include="RadioApiHandler.c" />
     <ClCompile Include="Run-time-stats-utils.c" />
     <ClCompile Include="SecurityHttpHandler.c" />
+    <ClCompile Include="ThingApiHandler.c" />
     <ClCompile Include="TraceMacros\Example1\DemoIPTrace.c" />
   </ItemGroup>
   <ItemGroup>

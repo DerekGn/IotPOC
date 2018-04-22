@@ -12,6 +12,7 @@
 
 #include "jsmn.h"
 #include "Json.h"
+#include "ApiHandlers.h"
 
 #define radioConfigRADIO_COUNT 4
 
@@ -34,8 +35,6 @@ typedef struct
 	BaseType_t xFaulted;
 	eRadioType xType;
 } Radio_t;
-
-static BaseType_t prvParseId(const char *pcCurrent, BaseType_t *pxRadioId);
 
 static void prvAddRadio(JsonGenerator_t *pxGenerator, const Radio_t *pxRadio);
 
@@ -137,7 +136,7 @@ static BaseType_t prvParseRadioGet(const char *pcUrlData, BaseType_t *pxRadioId,
 		{
 			if (xTokenCount == 2)
 			{
-				if (!prvParseId(pcCurrent, pxRadioId))
+				if (!xParseId(pcCurrent, pxRadioId))
 				{
 					xResult = pdFALSE;
 					break;
@@ -167,7 +166,7 @@ static BaseType_t prvParseRadioGet(const char *pcUrlData, BaseType_t *pxRadioId,
 		{
 			xResult = pdTRUE;
 		}
-		else if (prvParseId(pcCurrent, pxRadioId))
+		else if (xParseId(pcCurrent, pxRadioId))
 		{
 			*pxRadio = pdTRUE;
 		}
@@ -194,15 +193,4 @@ static void prvAddRadio(JsonGenerator_t *pxGenerator, const Radio_t *pxRadio)
 	vJsonOpenKey(pxGenerator, RADIOTYPE);
 	vJsonAddValue(pxGenerator, eNumber, cBuffer);
 	vJsonCloseNode(pxGenerator, eObject);
-}
-
-static BaseType_t prvParseId(const char *pcCurrent, BaseType_t *pxRadioId)
-{
-	char *pcStop;
-
-	errno = 0;
-
-	*pxRadioId = strtol(pcCurrent, &pcStop, 10);
-
-	return !(errno == ERANGE || pcCurrent == pcStop);
 }
