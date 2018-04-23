@@ -14,11 +14,35 @@
 #include "Json.h"
 #include "ApiHandlers.h"
 
+typedef enum
+{
+	eReadOnly,
+	eReadWrite,
+	eWriteOnly
+} eThingAccess;
+
+typedef enum
+{
+	eBinary
+} eThingType;
+
 typedef struct
 {
 	UBaseType_t xId;
+	eThingType xType;
+	eThingAccess xAccessType;
 	char cName[30];
+	//char cUnit[10];
+	//char cValue[10];
 } thing_t;
+
+#define thingConfigTHING_COUNT 4
+
+//static thing_t things[thingConfigTHING_COUNT] =
+//{
+//	{1, "temp", "C", "100" },
+//	{ 2, "temp", "C", "100" }
+//};
 
 static BaseType_t prvParseThingGet(const char *pcUrlData, BaseType_t *pxThingId, BaseType_t *pxThing);
 
