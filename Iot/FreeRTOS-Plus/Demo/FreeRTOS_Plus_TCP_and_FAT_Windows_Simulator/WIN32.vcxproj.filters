@@ -84,6 +84,12 @@
     <Filter Include="Json\include">
       <UniqueIdentifier>{5675a01d-44fe-4c3b-b253-b18b222dd83d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SenML">
+      <UniqueIdentifier>{1f2aad99-abc3-48cc-91e3-0c97aa8084c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SenML\include">
+      <UniqueIdentifier>{5f04accc-b672-4c25-a49c-6f90635541f1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\FreeRTOS\Source\portable\MSVC-MingW\port.c">
@@ -433,6 +439,9 @@
     </ClInclude>
     <ClInclude Include="Json.h">
       <Filter>Json\include</Filter>
+    </ClInclude>
+    <ClInclude Include="SenML.h">
+      <Filter>SenML\include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

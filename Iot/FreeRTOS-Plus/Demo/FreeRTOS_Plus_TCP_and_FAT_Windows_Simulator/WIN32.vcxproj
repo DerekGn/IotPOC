@@ -265,6 +265,7 @@
     <ClInclude Include="FreeRTOS_HTTP_pipeline.h" />
     <ClInclude Include="jsmn.h" />
     <ClInclude Include="Json.h" />
+    <ClInclude Include="SenML.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
