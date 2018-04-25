@@ -443,5 +443,8 @@
     <ClInclude Include="SenML.h">
       <Filter>SenML\include</Filter>
     </ClInclude>
+    <ClInclude Include="SenMLUnits.h">
+      <Filter>SenML\include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
