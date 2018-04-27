@@ -14,19 +14,13 @@
 *
 */
 
-#ifndef FREERTOS_HTTP_IO_H
-#define	FREERTOS_HTTP_IO_H
+#ifndef CORE_LINK_H
+#define CORE_LINK_H
 
-/* FreeRTOS */
-#include <FreeRTOS.h>
+#define CoreInterfaceDescription	"if"
+#define CoreResourceType			"rt"
+#define CoreContentType				"ct"
+#define CoreTitle					"title"
+#define CoreSize					"sz"
 
-/* FreeRTOS+TCP includes. */
-#include "FreeRTOS_Sockets.h"
-#include "FreeRTOS_server_private.h"
-
-void vFileClose(HTTPClient_t *pxClient);
-BaseType_t xSendFile(HTTPClient_t *pxClient);
-const char *pcGetContentsType(const char *apFname);
-BaseType_t xSendReply(HTTPClient_t *pxClient, BaseType_t xCode);
-
-#endif FREERTOS_HTTP_IO_H  /* FREERTOS_HTTP_IO_H */
+#endif CORE_LINK_H

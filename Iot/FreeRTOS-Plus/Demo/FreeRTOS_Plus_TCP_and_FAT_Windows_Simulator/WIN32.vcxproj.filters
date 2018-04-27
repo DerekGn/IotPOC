@@ -90,6 +90,12 @@
     <Filter Include="SenML\include">
       <UniqueIdentifier>{5f04accc-b672-4c25-a49c-6f90635541f1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{c5003f44-0c90-4e38-8f34-1108971ab703}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\include">
+      <UniqueIdentifier>{04ec3ee9-2cf6-4359-a36f-064b3dcaf942}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\FreeRTOS\Source\portable\MSVC-MingW\port.c">
@@ -279,6 +285,12 @@
     <ClCompile Include="ThingApiHandler.c">
       <Filter>ApiHandlers</Filter>
     </ClCompile>
+    <ClCompile Include="CoreDiscoApiHandler.c">
+      <Filter>ApiHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="CoreHcProxyApiHandler.c">
+      <Filter>ApiHandlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\FreeRTOS-Plus-TCP\include\NetworkInterface.h">
@@ -445,6 +457,9 @@
     </ClInclude>
     <ClInclude Include="SenMLUnits.h">
       <Filter>SenML\include</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreLink.h">
+      <Filter>Core\include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

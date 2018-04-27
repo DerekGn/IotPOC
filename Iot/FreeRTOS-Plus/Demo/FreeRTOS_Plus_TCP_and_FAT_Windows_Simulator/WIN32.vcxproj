@@ -184,6 +184,7 @@
     <ClCompile Include="ApiHandlers.c" />
     <ClCompile Include="ApiHttpHandler.c" />
     <ClCompile Include="CLI-commands.c" />
+    <ClCompile Include="CoreHcProxyApiHandler.c" />
     <ClCompile Include="DemoTasks\TCPEchoClient_SeparateTasks.c" />
     <ClCompile Include="DemoTasks\TCPEchoClient_SingleTasks.c" />
     <ClCompile Include="DemoTasks\TwoUDPEchoClients.c" />
@@ -191,6 +192,7 @@
     <ClCompile Include="DemoTasks\SimpleUDPClientAndServer.c" />
     <ClCompile Include="DemoTasks\SimpleTCPEchoServer.c" />
     <ClCompile Include="demo_logging.c" />
+    <ClCompile Include="CoreDiscoApiHandler.c" />
     <ClCompile Include="GatewayApiHandler.c" />
     <ClCompile Include="FileHttpHandler.c" />
     <ClCompile Include="FreeRTOS_HTTP_io.c" />
@@ -258,6 +260,7 @@
     <ClInclude Include="..\..\Source\FreeRTOS-Plus-TCP\protocols\include\NTPClient.h" />
     <ClInclude Include="..\..\Source\FreeRTOS-Plus-TCP\protocols\include\NTPDemo.h" />
     <ClInclude Include="ApiHandlers.h" />
+    <ClInclude Include="CoreLink.h" />
     <ClInclude Include="FreeRTOSConfig.h" />
     <ClInclude Include="FreeRTOSFATConfig.h" />
     <ClInclude Include="FreeRTOSIPConfig.h" />

@@ -14,19 +14,45 @@
 *
 */
 
-#ifndef FREERTOS_HTTP_IO_H
-#define	FREERTOS_HTTP_IO_H
-
-/* FreeRTOS */
 #include <FreeRTOS.h>
+#include "task.h"
 
 /* FreeRTOS+TCP includes. */
+#include "FreeRTOS_IP.h"
 #include "FreeRTOS_Sockets.h"
+#include "FreeRTOS_TCP_server.h"
 #include "FreeRTOS_server_private.h"
 
-void vFileClose(HTTPClient_t *pxClient);
-BaseType_t xSendFile(HTTPClient_t *pxClient);
-const char *pcGetContentsType(const char *apFname);
-BaseType_t xSendReply(HTTPClient_t *pxClient, BaseType_t xCode);
+#include "FreeRTOS_HTTP_io.h"
+#include "FreeRTOS_HTTP_commands.h"
 
-#endif FREERTOS_HTTP_IO_H  /* FREERTOS_HTTP_IO_H */
+#include "jsmn.h"
+#include "Json.h"
+#include "ApiHandlers.h"
+
+extern void vHandleCoreHcProxyApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount)
+{
+	BaseType_t xCode = WEB_BAD_REQUEST;
+
+	strcpy(pxClient->pxParent->pcExtraContents, "Content-Length: 0\r\n");
+
+	switch (xIndex)
+	{
+	case ECMD_GET:
+		FreeRTOS_debug_printf(("%s: Handling GET\n", __func__));
+
+		char *pcScheme = strnstr(pxClient->pcUrlData, "coap");
+
+		if (pcScheme != NULL)
+		{
+
+		}
+
+		break;
+	}
+
+	if (xCode != WEB_REPLY_OK)
+	{
+		xSendReply(pxClient, xCode);
+	}
+}
