@@ -26,15 +26,19 @@
 #include "FreeRTOS_HTTP_io.h"
 #include "FreeRTOS_HTTP_commands.h"
 
+#include <stdbool.h>
+
 #include "jsmn.h"
 #include "Json.h"
 #include "ApiHandlers.h"
 
 #define IS_DIGIT(c) (c - ' ' > 0) || (c - ' ' < 9)
 
-static BaseType_t xParseCoreUrl(const char * pcUri, char *pcCoreUri);
-
 static void vUrlDecode(char *pcDst, const char *pcSrc);
+
+static bool bExtractCoreUrl(const char * pcUri, char *pcCoreUri);
+
+static bool bExtractTemplateVariable(char * pcDest, const char *pcSrc, const char *pcFind, int iFindSize);
 
 typedef enum
 {
@@ -56,6 +60,13 @@ extern void vHandleCoreHcProxyApi(HTTPClient_t *pxClient, BaseType_t xIndex, cha
 	case ECMD_GET:
 		FreeRTOS_debug_printf(("%s: Handling GET\n", __func__));
 		
+		char cCoreUrl[100];
+
+		if (bExtractCoreUrl(pxClient->pcUrlData, cCoreUrl) == false)
+		{
+			// TODO parse core uri
+		}
+
 		break;
 	}
 
@@ -65,7 +76,7 @@ extern void vHandleCoreHcProxyApi(HTTPClient_t *pxClient, BaseType_t xIndex, cha
 	}
 }
 
-static BaseType_t xParseCoreUrl(const char * pcUri, char *pcCoreUri)
+static bool bExtractCoreUrl(const char * pcUri, char *pcCoreUri)
 {
 	const char *pcNext;
 	const char *pcCurrent = pcUri;
@@ -130,68 +141,29 @@ static BaseType_t xParseCoreUrl(const char * pcUri, char *pcCoreUri)
 		strcpy_s(pcCoreUri, 100, pcCurrent);
 		break;
 	case eEnhanced:
+		
+		bExtractTemplateVariable(pcCoreUri, pcCurrent, "s=", 2);
 
-		const char * pcEnd = NULL;
-		const char * pcStart = strstr(pcCurrent, "s=");
+		strcat_s(pcCoreUri, 100, "://");
 
-		if (pcStart != NULL)
+		bExtractTemplateVariable(pcCoreUri, pcCurrent, "&hp=", 4);
+
+		bExtractTemplateVariable(pcCoreUri, pcCurrent, "&p=", 3);
+
+		strcat_s(pcCoreUri, 100, "?");
+
+		bExtractTemplateVariable(pcCoreUri, pcCurrent, "&q=", 3);
+
+		if (pcCoreUri[strlen(pcCoreUri) - 1] == '?')
 		{
-			pcEnd = strstr(pcStart, "&");
-
-			if (pcEnd != NULL)
-			{
-				strncpy_s(pcCoreUri, 100, pcStart + 2, pcEnd - pcStart - 2);
-				strcat_s(pcCoreUri, 100, "://");
-			}
+			pcCoreUri[strlen(pcCoreUri) - 1] = '\0';
 		}
-
-		pcStart = strstr(pcEnd, "hp=");
-
-		if (pcStart != NULL)
-		{
-			pcEnd = strstr(pcStart, "&");
-
-			if (pcEnd != NULL)
-			{
-				strncat_s(pcCoreUri, 100, pcStart + 3, pcEnd - pcStart - 3);
-			}
-		}
-
-		pcStart = strstr(pcEnd, "p=");
-
-		if (pcStart != NULL)
-		{
-			pcEnd = strstr(pcStart, "&");
-
-			if (pcEnd != NULL)
-			{
-				strncat_s(pcCoreUri, 100, pcStart + 2, pcEnd - pcStart - 2);
-			}
-		}
-
-		pcStart = strstr(pcEnd, "q=");
-
-		if (pcStart != NULL)
-		{
-			int i = strlen(pcCoreUri);
-			pcStart += 2;
-
-			pcCoreUri[i++] = '?';
-
-			while (*pcStart != '\0' && *pcStart != '&')
-			{
-				pcCoreUri[i++] = *pcStart;
-				pcStart++;
-			}
-
-			pcCoreUri[i] = '\0';
-		}
-
+		
 		break;
 	}
 
 	if (xMapping != eNone)
-		urldecode2(pcCoreUri, pcCoreUri);
+		vUrlDecode(pcCoreUri, pcCoreUri);
 
 	return xMapping != eNone;
 }
@@ -201,7 +173,10 @@ static void vUrlDecode(char *pcDst, const char *pcSrc)
 	char a, b;
 	while (*pcSrc)
 	{
-		if ((*pcSrc == '%') && ((a = pcSrc[1]) && (b = pcSrc[2]))
+		a = pcSrc[1];
+		b = pcSrc[2];
+
+		if ((*pcSrc == '%') && (a && b)
 			&& (IS_DIGIT(a) && IS_DIGIT(b)))
 		{
 			if (a >= 'a')
@@ -230,4 +205,25 @@ static void vUrlDecode(char *pcDst, const char *pcSrc)
 		}
 	}
 	*pcDst++ = '\0';
+}
+
+static bool bExtractTemplateVariable(char * pcDest, const char *pcSrc, const char *pcFind, int iFindSize)
+{
+	const char * pcStart = strstr(pcSrc, pcFind);
+	
+	if (pcStart != NULL)
+	{
+		int i = strlen(pcDest);
+		pcStart += iFindSize;
+		
+		while (*pcStart != '\0' && *pcStart != '&')
+		{
+			pcDest[i++] = *pcStart;
+			pcStart++;
+		}
+
+		pcDest[i] = '\0';
+	}
+
+	return pcStart != NULL;
 }

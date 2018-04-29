@@ -98,9 +98,7 @@ eProcessPatchResult xProcessPatchDocument(char *pcJson, jsmntok_t *pxTokens, Bas
 	jsmntok_t *pxValueToken = 0;
 	eOperationType_t xOperation;
 	eProcessPatchResult xResult;
-
-	char cBuffer[100];
-
+	
 	if (xJsonTokenCount > 0)
 	{
 		if (pxTokens[0].type == JSMN_ARRAY)

@@ -103,7 +103,7 @@ BaseType_t xSettings;
 			}
 			else if (xSettings)
 			{
-				//TODO 
+				//TODO get settings
 			}
 			else
 			{
@@ -121,10 +121,11 @@ BaseType_t xSettings;
 		{
 			if (xSettings)
 			{
+				//TODO update settings
 			}
 			else if (xDevice)
 			{
-
+				//TODO update device
 			}
 		}
 		break;
