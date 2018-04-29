@@ -32,22 +32,22 @@
 
 // Filtering may be performed on any of the link format attributes [GET /.well-known/core?rt=temperature-c] 
 // 4.1.  Query Filtering /.well-known/core{?search*}
-extern void vHandleCoreDiscoApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount)
+void vHandleCoreDiscoApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount)
 {
 BaseType_t xCode = WEB_BAD_REQUEST;
 
-	strcpy(pxClient->pxParent->pcExtraContents, "Content-Length: 0\r\n");
+    strcpy(pxClient->pxParent->pcExtraContents, "Content-Length: 0\r\n");
 
-	switch (xIndex)
-	{
-	case ECMD_GET:
-		FreeRTOS_debug_printf(("%s: Handling GET\n", __func__));
-		
-		break;
-	}
+    switch (xIndex)
+    {
+    case ECMD_GET:
+        FreeRTOS_debug_printf(("%s: Handling GET\n", __func__));
+        
+        break;
+    }
 
-	if (xCode != WEB_REPLY_OK)
-	{
-		xSendReply(pxClient, xCode);
-	}
+    if (xCode != WEB_REPLY_OK)
+    {
+        xSendReply(pxClient, xCode);
+    }
 }

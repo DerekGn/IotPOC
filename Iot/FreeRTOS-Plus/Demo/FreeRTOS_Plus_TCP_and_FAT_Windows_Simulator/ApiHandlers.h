@@ -6,6 +6,7 @@
 
 /* FreeRTOS+TCP includes. */
 #include "FreeRTOS_Sockets.h"
+#include "FreeRTOS_TCP_server.h"
 #include "FreeRTOS_server_private.h"
 
 #include "jsmn.h"
@@ -14,9 +15,9 @@ typedef void (*xApiHandlerAction_t) ( HTTPClient_t *pxClient, BaseType_t xIndex,
 
 typedef struct ApiHandler
 {
-	BaseType_t xRouteLen;
-	const char * const pcRoute;
-	xApiHandlerAction_t xApiHandlerAction;
+    BaseType_t xRouteLen;
+    const char * const pcRoute;
+    xApiHandlerAction_t xApiHandlerAction;
 } ApiHandler_t;
 
 BaseType_t xApiHandlerEntries( void );
@@ -24,6 +25,5 @@ BaseType_t xApiHandlerEntries( void );
 BaseType_t xSendApiResponse(HTTPClient_t *pxClient);
 
 BaseType_t xParseId(const char *pcCurrent, BaseType_t *pxId);
-
 
 #endif /* API_HANDLER_H */

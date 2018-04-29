@@ -17,10 +17,10 @@
 #ifndef CORE_LINK_H
 #define CORE_LINK_H
 
-#define CoreInterfaceDescription	"if"
-#define CoreResourceType			"rt"
-#define CoreContentType				"ct"
-#define CoreTitle					"title"
-#define CoreSize					"sz"
+#define CoreInterfaceDescription    "if"
+#define CoreResourceType            "rt"
+#define CoreContentType             "ct"
+#define CoreTitle                   "title"
+#define CoreSize                    "sz"
 
 #endif CORE_LINK_H

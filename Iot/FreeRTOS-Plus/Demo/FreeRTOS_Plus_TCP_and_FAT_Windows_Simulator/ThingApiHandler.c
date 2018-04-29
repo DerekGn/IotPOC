@@ -32,24 +32,24 @@
 
 typedef enum
 {
-	eReadOnly,
-	eReadWrite,
-	eWriteOnly
+    eReadOnly,
+    eReadWrite,
+    eWriteOnly
 } eThingAccess;
 
 typedef enum
 {
-	eBinary
+    eBinary
 } eThingType;
 
 typedef struct
 {
-	UBaseType_t xId;
-	eThingType xType;
-	eThingAccess xAccessType;
-	char cName[30];
-	//char cUnit[10];
-	//char cValue[10];
+    UBaseType_t xId;
+    eThingType xType;
+    eThingAccess xAccessType;
+    char cName[30];
+    //char cUnit[10];
+    //char cValue[10];
 } thing_t;
 
 #define thingConfigTHING_COUNT 4
@@ -68,82 +68,82 @@ BaseType_t xCode = WEB_BAD_REQUEST;
 BaseType_t xThingId;
 BaseType_t xThing;
 
-	switch (xIndex)
-	{
-	case ECMD_GET:
-		FreeRTOS_debug_printf(("%s: Handling GET\n", __func__));
+    switch (xIndex)
+    {
+    case ECMD_GET:
+        FreeRTOS_debug_printf(("%s: Handling GET\n", __func__));
 
-		if (prvParseThingGet(pxClient->pcUrlData, &xThingId, &xThing))
-		{
-			JsonGenerator_t xGenerator;
+        if (prvParseThingGet(pxClient->pcUrlData, &xThingId, &xThing))
+        {
+            JsonGenerator_t xGenerator;
 
-			vJsonInit(&xGenerator, pxClient->pxParent->pcCommandBuffer, sizeof(pxClient->pxParent->pcCommandBuffer));
+            vJsonInit(&xGenerator, pxClient->pxParent->pcCommandBuffer, sizeof(pxClient->pxParent->pcCommandBuffer));
 
-			if (!xThing)
-			{
-			}
-			else
-			{
-			}
-		}
+            if (!xThing)
+            {
+            }
+            else
+            {
+            }
+        }
 
-		break;
-	case ECMD_PATCH:
-		FreeRTOS_debug_printf(("%s: Handling PATCH\n", __func__));
-		break;
-	}
+        break;
+    case ECMD_PATCH:
+        FreeRTOS_debug_printf(("%s: Handling PATCH\n", __func__));
+        break;
+    }
 
-	if (xCode != WEB_REPLY_OK)
-	{
-		xSendReply(pxClient, xCode);
-	}
+    if (xCode != WEB_REPLY_OK)
+    {
+        xSendReply(pxClient, xCode);
+    }
 }
 
 BaseType_t prvParseThingGet(const char * pcUrlData, BaseType_t * pxThingId, BaseType_t * pxThing)
 {
-	char *pcNext;
-	const char *pcCurrent = pcUrlData;
-	BaseType_t xTokenCount = 0;
-	BaseType_t xResult = pdTRUE;
+    char *pcNext;
+    const char *pcCurrent = pcUrlData;
+    BaseType_t xTokenCount = 0;
+    BaseType_t xResult = pdTRUE;
 
-	*pxThing = pdFALSE;
+    *pxThing = pdFALSE;
 
-	while ((pcNext = strchr(pcCurrent, '/')) != NULL)
-	{
-		if (pcCurrent != pcNext)
-		{
-			if (xTokenCount == 2)
-			{
-				if (!xParseId(pcCurrent, pxThingId))
-				{
-					xResult = pdFALSE;
-					break;
-				}
+    while ((pcNext = strchr(pcCurrent, '/')) != NULL)
+    {
+        if (pcCurrent != pcNext)
+        {
+            if (xTokenCount == 2)
+            {
+                if (!xParseId(pcCurrent, pxThingId))
+                {
+                    xResult = pdFALSE;
+                    break;
+                }
 
-				*pxThing = pdTRUE;
-			}
-			
-			xTokenCount++;
-		}
+                *pxThing = pdTRUE;
+            }
+            
+            xTokenCount++;
+        }
 
-		pcCurrent = pcNext + 1;
-	}
+        pcCurrent = pcNext + 1;
+    }
 
-	if (*pcCurrent != '\0')
-	{
-		if (strcmp(pcCurrent, "thing") == 0)
-		{
-			xResult = pdTRUE;
-		}
-		else if (xParseId(pcCurrent, pxThingId))
-		{
-			*pxThing = pdTRUE;
-		}
-		else
-		{
-			xResult = pdFALSE;
-		}
-	}
+    if (*pcCurrent != '\0')
+    {
+        if (strcmp(pcCurrent, "thing") == 0)
+        {
+            xResult = pdTRUE;
+        }
+        else if (xParseId(pcCurrent, pxThingId))
+        {
+            *pxThing = pdTRUE;
+        }
+        else
+        {
+            xResult = pdFALSE;
+        }
+    }
 
-	return xResult;
+    return xResult;
 }

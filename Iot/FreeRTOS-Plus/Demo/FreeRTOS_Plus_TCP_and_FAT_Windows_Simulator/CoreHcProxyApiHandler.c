@@ -42,188 +42,190 @@ static bool bExtractTemplateVariable(char * pcDest, const char *pcSrc, const cha
 
 typedef enum
 {
-	eNone,
-	eCoap,
-	eTarget,
-	eForward,
-	eEnhanced
+    eNone,
+    eCoap,
+    eTarget,
+    eForward,
+    eEnhanced
 } eUriMappingType_t;
 
-extern void vHandleCoreHcProxyApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount)
+void vHandleCoreHcProxyApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount)
 {
-	BaseType_t xCode = WEB_BAD_REQUEST;
+    BaseType_t xCode = WEB_BAD_REQUEST;
 
-	strcpy(pxClient->pxParent->pcExtraContents, "Content-Length: 0\r\n");
+    strcpy(pxClient->pxParent->pcExtraContents, "Content-Length: 0\r\n");
 
-	switch (xIndex)
-	{
-	case ECMD_GET:
-		FreeRTOS_debug_printf(("%s: Handling GET\n", __func__));
-		
-		char cCoreUrl[100];
+    switch (xIndex)
+    {
+    case ECMD_GET:
+        FreeRTOS_debug_printf(("%s: Handling GET\n", __func__));
+        
+        char cCoreUrl[100];
 
-		if (bExtractCoreUrl(pxClient->pcUrlData, cCoreUrl) == false)
-		{
-			// TODO parse core uri
-		}
+        if (bExtractCoreUrl(pxClient->pcUrlData, cCoreUrl) == false)
+        {
+            // TODO parse core uri
+        }
 
-		break;
-	}
+        break;
+    }
 
-	if (xCode != WEB_REPLY_OK)
-	{
-		xSendReply(pxClient, xCode);
-	}
+    if (xCode != WEB_REPLY_OK)
+    {
+        xSendReply(pxClient, xCode);
+    }
 }
 
 static bool bExtractCoreUrl(const char * pcUri, char *pcCoreUri)
 {
-	const char *pcNext;
-	const char *pcCurrent = pcUri;
-	eUriMappingType_t xMapping = eNone;
+    const char *pcNext;
+    const char *pcCurrent = pcUri;
+    eUriMappingType_t xMapping = eNone;
 
-	pcCoreUri[0] = '\0';
+    pcCoreUri[0] = '\0';
 
-	while ((pcNext = strchr(pcCurrent, '/')) != NULL)
-	{
-		if (strncmp(pcCurrent, "?target_uri=", 12) == 0)
-		{
-			xMapping = eTarget;
-			pcCurrent += 12;
-			break;
-		}
+    while ((pcNext = strchr(pcCurrent, '/')) != NULL)
+    {
+        if (strncmp(pcCurrent, "?target_uri=", 12) == 0)
+        {
+            xMapping = eTarget;
+            pcCurrent += 12;
+            break;
+        }
 
-		if (strncmp(pcCurrent, "forward", 7) == 0)
-		{
-			xMapping = eForward;
-			pcCurrent += 7;
-			if (pcCurrent[0] == '/')
-				pcCurrent++;
-			break;
-		}
+        if (strncmp(pcCurrent, "forward", 7) == 0)
+        {
+            xMapping = eForward;
+            pcCurrent += 7;
+            if (pcCurrent[0] == '/')
+                pcCurrent++;
+            break;
+        }
 
-		if (strncmp(pcCurrent, "?s=", 3) == 0)
-		{
-			xMapping = eEnhanced;
-			pcCurrent++;
-			break;
-		}
+        if (strncmp(pcCurrent, "?s=", 3) == 0)
+        {
+            xMapping = eEnhanced;
+            pcCurrent++;
+            break;
+        }
 
-		if (strncmp(pcCurrent, "coap", 4) == 0)
-		{
-			xMapping = eCoap;
-			break;
-		}
+        if (strncmp(pcCurrent, "coap", 4) == 0)
+        {
+            xMapping = eCoap;
+            break;
+        }
 
-		pcCurrent = pcNext + 1;
-	}
+        pcCurrent = pcNext + 1;
+    }
 
-	switch (xMapping)
-	{
-	case eCoap:
-		if (strncmp(pcCurrent, "coaps://", 8) == 0 || strncmp(pcCurrent, "coap://", 7) == 0)
-		{
-			strcpy_s(pcCoreUri, 100, pcCurrent);
-		}
-		else if (strncmp(pcCurrent, "coap/", 5) == 0)
-		{
-			strcpy_s(pcCoreUri, 100, "coap://");
-			strcat_s(pcCoreUri, 100, pcCurrent + 5);
-		}
-		else if (strncmp(pcCurrent, "coaps/", 6) == 0)
-		{
-			strcpy_s(pcCoreUri, 100, "coaps://");
-			strcat_s(pcCoreUri, 100, pcCurrent + 6);
-		}
-		break;
-	case eTarget:
-	case eForward:
-		strcpy_s(pcCoreUri, 100, pcCurrent);
-		break;
-	case eEnhanced:
-		
-		bExtractTemplateVariable(pcCoreUri, pcCurrent, "s=", 2);
+    switch (xMapping)
+    {
+    case eCoap:
+        if (strncmp(pcCurrent, "coaps://", 8) == 0 || strncmp(pcCurrent, "coap://", 7) == 0)
+        {
+            strcpy(pcCoreUri, pcCurrent);
+        }
+        else if (strncmp(pcCurrent, "coap/", 5) == 0)
+        {
+            strcpy(pcCoreUri, "coap://");
+            strcat(pcCoreUri, pcCurrent + 5);
+        }
+        else if (strncmp(pcCurrent, "coaps/", 6) == 0)
+        {
+            strcpy(pcCoreUri, "coaps://");
+            strcat(pcCoreUri, pcCurrent + 6);
+        }
+        break;
+    case eTarget:
+    case eForward:
+        strcpy(pcCoreUri, pcCurrent);
+        break;
+    case eEnhanced:
+        
+        bExtractTemplateVariable(pcCoreUri, pcCurrent, "s=", 2);
 
-		strcat_s(pcCoreUri, 100, "://");
+        strcat(pcCoreUri, "://");
 
-		bExtractTemplateVariable(pcCoreUri, pcCurrent, "&hp=", 4);
+        bExtractTemplateVariable(pcCoreUri, pcCurrent, "&hp=", 4);
 
-		bExtractTemplateVariable(pcCoreUri, pcCurrent, "&p=", 3);
+        bExtractTemplateVariable(pcCoreUri, pcCurrent, "&p=", 3);
 
-		strcat_s(pcCoreUri, 100, "?");
+        strcat(pcCoreUri, "?");
 
-		bExtractTemplateVariable(pcCoreUri, pcCurrent, "&q=", 3);
+        bExtractTemplateVariable(pcCoreUri, pcCurrent, "&q=", 3);
 
-		if (pcCoreUri[strlen(pcCoreUri) - 1] == '?')
-		{
-			pcCoreUri[strlen(pcCoreUri) - 1] = '\0';
-		}
-		
-		break;
-	}
+        if (pcCoreUri[strlen(pcCoreUri) - 1] == '?')
+        {
+            pcCoreUri[strlen(pcCoreUri) - 1] = '\0';
+        }
+        
+        break;
+    case eNone:
+        break;
+    }
 
-	if (xMapping != eNone)
-		vUrlDecode(pcCoreUri, pcCoreUri);
+    if (xMapping != eNone)
+        vUrlDecode(pcCoreUri, pcCoreUri);
 
-	return xMapping != eNone;
+    return xMapping != eNone;
 }
 
 static void vUrlDecode(char *pcDst, const char *pcSrc)
 {
-	char a, b;
-	while (*pcSrc)
-	{
-		a = pcSrc[1];
-		b = pcSrc[2];
+    char a, b;
+    while (*pcSrc)
+    {
+        a = pcSrc[1];
+        b = pcSrc[2];
 
-		if ((*pcSrc == '%') && (a && b)
-			&& (IS_DIGIT(a) && IS_DIGIT(b)))
-		{
-			if (a >= 'a')
-				a -= 'a' - 'A';
-			if (a >= 'A')
-				a -= ('A' - 10);
-			else
-				a -= '0';
-			if (b >= 'a')
-				b -= 'a' - 'A';
-			if (b >= 'A')
-				b -= ('A' - 10);
-			else
-				b -= '0';
-			*pcDst++ = 16 * a + b;
-			pcSrc += 3;
-		}
-		else if (*pcSrc == '+')
-		{
-			*pcDst++ = ' ';
-			pcSrc++;
-		}
-		else
-		{
-			*pcDst++ = *pcSrc++;
-		}
-	}
-	*pcDst++ = '\0';
+        if ((*pcSrc == '%') && (a && b)
+            && ((IS_DIGIT(a)) && (IS_DIGIT(b))))
+        {
+            if (a >= 'a')
+                a -= 'a' - 'A';
+            if (a >= 'A')
+                a -= ('A' - 10);
+            else
+                a -= '0';
+            if (b >= 'a')
+                b -= 'a' - 'A';
+            if (b >= 'A')
+                b -= ('A' - 10);
+            else
+                b -= '0';
+            *pcDst++ = 16 * a + b;
+            pcSrc += 3;
+        }
+        else if (*pcSrc == '+')
+        {
+            *pcDst++ = ' ';
+            pcSrc++;
+        }
+        else
+        {
+            *pcDst++ = *pcSrc++;
+        }
+    }
+    *pcDst++ = '\0';
 }
 
 static bool bExtractTemplateVariable(char * pcDest, const char *pcSrc, const char *pcFind, int iFindSize)
 {
-	const char * pcStart = strstr(pcSrc, pcFind);
-	
-	if (pcStart != NULL)
-	{
-		int i = strlen(pcDest);
-		pcStart += iFindSize;
-		
-		while (*pcStart != '\0' && *pcStart != '&')
-		{
-			pcDest[i++] = *pcStart;
-			pcStart++;
-		}
+    const char * pcStart = strstr(pcSrc, pcFind);
+    
+    if (pcStart != NULL)
+    {
+        int i = strlen(pcDest);
+        pcStart += iFindSize;
+        
+        while (*pcStart != '\0' && *pcStart != '&')
+        {
+            pcDest[i++] = *pcStart;
+            pcStart++;
+        }
 
-		pcDest[i] = '\0';
-	}
+        pcDest[i] = '\0';
+    }
 
-	return pcStart != NULL;
+    return pcStart != NULL;
 }
