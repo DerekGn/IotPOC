@@ -461,5 +461,8 @@
     <ClInclude Include="CoreLink.h">
       <Filter>Core\include</Filter>
     </ClInclude>
+    <ClInclude Include="HttpCoap.h">
+      <Filter>Core\include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

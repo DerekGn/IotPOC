@@ -266,6 +266,7 @@
     <ClInclude Include="FreeRTOSIPConfig.h" />
     <ClInclude Include="FreeRTOS_HTTP_io.h" />
     <ClInclude Include="FreeRTOS_HTTP_pipeline.h" />
+    <ClInclude Include="HttpCoap.h" />
     <ClInclude Include="jsmn.h" />
     <ClInclude Include="Json.h" />
     <ClInclude Include="SenML.h" />
