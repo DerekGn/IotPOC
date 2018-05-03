@@ -26,15 +26,21 @@
 #include "FreeRTOS_HTTP_io.h"
 #include "FreeRTOS_HTTP_commands.h"
 
+#include <stdbool.h>
+
 #include "jsmn.h"
 #include "Json.h"
 #include "ApiHandlers.h"
+
+bool bValidQuery(HTTPClient_t *pxClient, bool bHRef, bool bAttribute);
 
 // Filtering may be performed on any of the link format attributes [GET /.well-known/core?rt=temperature-c] 
 // 4.1.  Query Filtering /.well-known/core{?search*}
 void vHandleCoreDiscoApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount)
 {
 BaseType_t xCode = WEB_BAD_REQUEST;
+bool bHRef = false;
+bool bAttribute = false;
 
     strcpy(pxClient->pxParent->pcExtraContents, "Content-Length: 0\r\n");
 
@@ -43,6 +49,10 @@ BaseType_t xCode = WEB_BAD_REQUEST;
     case ECMD_GET:
         FreeRTOS_debug_printf(("%s: Handling GET\n", __func__));
         
+		if (bValidQuery(pxClient->pcUrlData, bHRef, bAttribute))
+		{
+		}
+
         break;
     }
 
@@ -50,4 +60,9 @@ BaseType_t xCode = WEB_BAD_REQUEST;
     {
         xSendReply(pxClient, xCode);
     }
+}
+
+bool bValidQuery(HTTPClient_t * pxClient, bool bHRef, bool bAttribute)
+{
+	return false;
 }
