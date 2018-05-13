@@ -30,9 +30,16 @@
 
 #include "jsmn.h"
 #include "Json.h"
+#include "HttpCoap.h"
+#include "CoreLink.h"
+#include "MediaTypes.h"
 #include "ApiHandlers.h"
 
+#define HREF "href"
+
 bool bValidQuery(HTTPClient_t *pxClient, bool bHRef, bool bAttribute);
+
+bool bIsProxyDiscovery(const char *pcUrlData);
 
 // Filtering may be performed on any of the link format attributes [GET /.well-known/core?rt=temperature-c] 
 // 4.1.  Query Filtering /.well-known/core{?search*}
@@ -49,8 +56,25 @@ bool bAttribute = false;
     case ECMD_GET:
         FreeRTOS_debug_printf(("%s: Handling GET\n", __func__));
         
-		if (bValidQuery(pxClient->pcUrlData, bHRef, bAttribute))
+		if (bIsProxyDiscovery(pxClient->pcUrlData))
 		{
+			JsonGenerator_t xGenerator;
+
+			vJsonInit(&xGenerator, pxClient->pxParent->pcCommandBuffer, sizeof(pxClient->pxParent->pcCommandBuffer));
+			vJsonAddValue(&xGenerator, eObject, "");
+			vJsonOpenKey(&xGenerator, HREF);
+			vJsonAddValue(&xGenerator, eString, "/hc/");
+			vJsonCloseNode(&xGenerator, eString);
+			vJsonOpenKey(&xGenerator, CORE_RESOURCE_TYPE);
+			vJsonAddValue(&xGenerator, eString, CORE_HTTP_PROXY);
+			vJsonCloseNode(&xGenerator, eObject);
+
+			xCode = WEB_REPLY_OK;
+			xSendApiResponse(pxClient, MEDIA_TYPE_APP_JSON);
+		}
+		else if(bValidQuery(pxClient->pcUrlData, bHRef, bAttribute))
+		{
+
 		}
 
         break;
@@ -62,7 +86,12 @@ bool bAttribute = false;
     }
 }
 
-bool bValidQuery(HTTPClient_t * pxClient, bool bHRef, bool bAttribute)
+bool bValidQuery( HTTPClient_t *pxClient, bool bHRef, bool bAttribute )
 {
 	return false;
+}
+
+bool bIsProxyDiscovery(const char * pcUrlData)
+{
+	return strstr(pcUrlData, "?rt=core.hc") != NULL;
 }

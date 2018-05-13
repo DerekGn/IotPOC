@@ -45,7 +45,7 @@ BaseType_t xApiHandlerEntries( void )
     return (BaseType_t) ( sizeof( xApiHandlers ) / sizeof( ApiHandler_t ) );
 }
 
-BaseType_t xSendApiResponse(HTTPClient_t *pxClient)
+BaseType_t xSendApiResponse(HTTPClient_t *pxClient, const char *pcContentType)
 {
     struct xTCP_SERVER *pxParent = pxClient->pxParent;
     BaseType_t xRc;
@@ -61,13 +61,14 @@ BaseType_t xSendApiResponse(HTTPClient_t *pxClient)
 #if	USE_HTML_CHUNKS
         "Transfer-Encoding: chunked\r\n"
 #endif
-        "Content-Type: application/json\r\n"
+        "Content-Type: %s\r\n"
         "Connection: keep-alive\r\n"
         "Access-Control-Allow-Origin: *\r\n"
         "%s\r\n"
         "%s",
         (int)200,
         webCodename(200),
+		pcContentType,
         pxParent->pcExtraContents,
         pxParent->pcCommandBuffer);
 

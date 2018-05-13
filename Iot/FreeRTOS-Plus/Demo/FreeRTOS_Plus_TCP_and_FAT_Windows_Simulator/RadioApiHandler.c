@@ -28,6 +28,7 @@
 
 #include "jsmn.h"
 #include "Json.h"
+#include "MediaTypes.h"
 #include "ApiHandlers.h"
 
 #define radioConfigRADIO_COUNT 4
@@ -111,7 +112,7 @@ BaseType_t xSettings;
             }
 
             xCode = WEB_REPLY_OK;
-            xSendApiResponse(pxClient);
+            xSendApiResponse(pxClient, MEDIA_TYPE_APP_JSON);
         }
         
         break;

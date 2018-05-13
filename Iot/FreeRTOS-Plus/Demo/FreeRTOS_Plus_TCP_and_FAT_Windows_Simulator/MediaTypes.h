@@ -14,32 +14,9 @@
 *
 */
 
-#ifndef API_HANDLER_H
-#define API_HANDLER_H
+#ifndef MEDIA_TYPES_H
+#define MEDIA_TYPES_H
 
-/* FreeRTOS */
-#include <FreeRTOS.h>
+#define MEDIA_TYPE_APP_JSON "application/json"
 
-/* FreeRTOS+TCP includes. */
-#include "FreeRTOS_Sockets.h"
-#include "FreeRTOS_TCP_server.h"
-#include "FreeRTOS_server_private.h"
-
-#include "jsmn.h"
-
-typedef void (*xApiHandlerAction_t) ( HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount);
-
-typedef struct ApiHandler
-{
-    BaseType_t xRouteLen;
-    const char * const pcRoute;
-    xApiHandlerAction_t xApiHandlerAction;
-} ApiHandler_t;
-
-BaseType_t xApiHandlerEntries( void );
-
-BaseType_t xSendApiResponse(HTTPClient_t *pxClient, const char *pcContentType);
-
-BaseType_t xParseId(const char *pcCurrent, BaseType_t *pxId);
-
-#endif /* API_HANDLER_H */
+#endif /* MEDIA_TYPES_H */

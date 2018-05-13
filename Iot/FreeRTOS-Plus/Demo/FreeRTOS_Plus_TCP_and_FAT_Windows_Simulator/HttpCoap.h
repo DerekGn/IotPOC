@@ -17,7 +17,7 @@
 #ifndef CORE_HTTP_H
 #define CORE_HTTP_H
 
-#define CORE_HTTP_RESOURCE_TYPE		"core.hc"
+#define CORE_HTTP_PROXY				"core.hc"
 #define CORE_HTTP_COAP_MEDIATYPE	"application/coap-payload"
 #define CORE_HTTP_COAP_FORMATPARAM	"cf"
 

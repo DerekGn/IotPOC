@@ -28,6 +28,7 @@
 
 #include "jsmn.h"
 #include "Json.h"
+#include "MediaTypes.h"
 #include "ApiHandlers.h"
 
 #define GATEWAYNAME     "name"
@@ -61,7 +62,7 @@ BaseType_t xCode = WEB_BAD_REQUEST;
             vJsonCloseNode(&xGenerator, eObject);
             
             xCode = WEB_REPLY_OK;
-            xSendApiResponse( pxClient );
+            xSendApiResponse( pxClient , MEDIA_TYPE_APP_JSON);
         break;
     case ECMD_PATCH:
             FreeRTOS_debug_printf( ( "%s: Handling PATCH\n", __func__ ) );

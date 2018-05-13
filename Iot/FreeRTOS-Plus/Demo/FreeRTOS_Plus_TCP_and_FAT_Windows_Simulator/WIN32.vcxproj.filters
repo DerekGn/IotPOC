@@ -464,5 +464,8 @@
     <ClInclude Include="HttpCoap.h">
       <Filter>Core\include</Filter>
     </ClInclude>
+    <ClInclude Include="MediaTypes.h">
+      <Filter>ApiHandlers\include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

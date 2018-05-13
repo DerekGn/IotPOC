@@ -28,6 +28,7 @@
 
 #include "jsmn.h"
 #include "Json.h"
+#include "MediaTypes.h"
 #include "ApiHandlers.h"
 
 #define NETMASK     "networkmask"
@@ -69,7 +70,7 @@ char cBuffer[49];
             vJsonAddValue(&xGenerator, eArray, prvMacToJsonArray(cBuffer, FreeRTOS_GetMACAddress()));
             
             xCode = WEB_REPLY_OK;
-            xSendApiResponse(pxClient);
+            xSendApiResponse(pxClient, MEDIA_TYPE_APP_JSON);
             break;
     }
 
