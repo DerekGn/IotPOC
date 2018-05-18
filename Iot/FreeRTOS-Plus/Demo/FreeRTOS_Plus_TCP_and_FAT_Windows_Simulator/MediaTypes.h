@@ -17,6 +17,7 @@
 #ifndef MEDIA_TYPES_H
 #define MEDIA_TYPES_H
 
-#define MEDIA_TYPE_APP_JSON "application/json"
+#define MEDIA_TYPE_APP_JSON					"application/json"
+#define MEDIA_TYPE_APP_LINK_FORMAT_JSON		"application/link-format+json"
 
 #endif /* MEDIA_TYPES_H */

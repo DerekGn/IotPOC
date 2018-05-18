@@ -49,6 +49,7 @@ typedef enum
     eEnhanced
 } eUriMappingType_t;
 
+// Implements rfc8075
 void vHandleCoreHcProxyApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount)
 {
     BaseType_t xCode = WEB_BAD_REQUEST;

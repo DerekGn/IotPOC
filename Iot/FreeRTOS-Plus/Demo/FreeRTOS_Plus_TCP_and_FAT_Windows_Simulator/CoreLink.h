@@ -19,8 +19,9 @@
 
 #define CORE_INTERFACE_DESCRIPTION		"if"
 #define CORE_RESOURCE_TYPE				"rt"
-#define CORE_CONTENT_TYPE				"ct"
+#define CORE_CONTENT_FORMAT				"ct"
 #define CORE_TITLE						"title"
 #define CORE_SIZE						"sz"
+#define CORE_HREF						"href" 
 
 #endif CORE_LINK_H

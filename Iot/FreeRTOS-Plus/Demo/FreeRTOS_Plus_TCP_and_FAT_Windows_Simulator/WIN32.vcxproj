@@ -192,7 +192,7 @@
     <ClCompile Include="DemoTasks\SimpleUDPClientAndServer.c" />
     <ClCompile Include="DemoTasks\SimpleTCPEchoServer.c" />
     <ClCompile Include="demo_logging.c" />
-    <ClCompile Include="CoreDiscoApiHandler.c" />
+    <ClCompile Include="CoreHcProxyDiscoApiHandler.c" />
     <ClCompile Include="GatewayApiHandler.c" />
     <ClCompile Include="FileHttpHandler.c" />
     <ClCompile Include="FreeRTOS_HTTP_io.c" />

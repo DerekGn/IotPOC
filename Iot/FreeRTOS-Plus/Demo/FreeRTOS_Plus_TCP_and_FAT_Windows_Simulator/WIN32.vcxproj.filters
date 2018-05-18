@@ -285,10 +285,10 @@
     <ClCompile Include="ThingApiHandler.c">
       <Filter>ApiHandlers</Filter>
     </ClCompile>
-    <ClCompile Include="CoreDiscoApiHandler.c">
+    <ClCompile Include="CoreHcProxyApiHandler.c">
       <Filter>ApiHandlers</Filter>
     </ClCompile>
-    <ClCompile Include="CoreHcProxyApiHandler.c">
+    <ClCompile Include="CoreHcProxyDiscoApiHandler.c">
       <Filter>ApiHandlers</Filter>
     </ClCompile>
   </ItemGroup>
