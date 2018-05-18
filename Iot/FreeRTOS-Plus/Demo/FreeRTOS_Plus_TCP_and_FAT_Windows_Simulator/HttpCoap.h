@@ -21,4 +21,4 @@
 //#define CORE_HTTP_COAP_FORMATPARAM		"cf"
 //#define CORE_HTTP_TARGET_ATTRIBUTE		"hct"
 
-#endif CORE_HTTP_H
+#endif /* CORE_HTTP_H */

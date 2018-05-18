@@ -26,8 +26,6 @@
 #include "FreeRTOS_HTTP_io.h"
 #include "FreeRTOS_HTTP_commands.h"
 
-#include <stdbool.h>
-
 #include "jsmn.h"
 #include "Json.h"
 #include "HttpCoap.h"
@@ -35,17 +33,17 @@
 #include "MediaTypes.h"
 #include "ApiHandlers.h"
 
-bool bValidQuery(HTTPClient_t *pxClient, bool bHRef, bool bAttribute);
+BaseType_t bValidQuery(const char *pcUrlData, BaseType_t bHRef, BaseType_t bAttribute);
 
-bool bIsProxyDiscovery(const char *pcUrlData);
+BaseType_t bIsProxyDiscovery(const char *pcUrlData);
 
 // Filtering may be performed on any of the link format attributes [GET /.well-known/core?rt=temperature-c] 
 // 4.1.  Query Filtering /.well-known/core{?search*}
 void vHandleHcProxyDiscoApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount)
 {
 BaseType_t xCode = WEB_BAD_REQUEST;
-bool bHRef = false;
-bool bAttribute = false;
+BaseType_t bHRef = pdFALSE;
+BaseType_t bAttribute = pdFALSE;
 
     strcpy(pxClient->pxParent->pcExtraContents, "Content-Length: 0\r\n");
 
@@ -86,12 +84,12 @@ bool bAttribute = false;
     }
 }
 
-bool bValidQuery( HTTPClient_t *pxClient, bool bHRef, bool bAttribute )
+BaseType_t bValidQuery( const char *pcUrlData, BaseType_t bHRef, BaseType_t bAttribute )
 {
-	return false;
+	return pdFALSE;
 }
 
-bool bIsProxyDiscovery(const char * pcUrlData)
+BaseType_t bIsProxyDiscovery(const char *pcUrlData)
 {
 	return strstr(pcUrlData, "?rt=core.hc") != NULL;
 }

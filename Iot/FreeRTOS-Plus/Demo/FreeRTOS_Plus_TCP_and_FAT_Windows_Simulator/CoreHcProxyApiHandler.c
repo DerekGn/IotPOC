@@ -26,8 +26,6 @@
 #include "FreeRTOS_HTTP_io.h"
 #include "FreeRTOS_HTTP_commands.h"
 
-#include <stdbool.h>
-
 #include "jsmn.h"
 #include "Json.h"
 #include "ApiHandlers.h"
@@ -36,9 +34,9 @@
 
 static void vUrlDecode(char *pcDst, const char *pcSrc);
 
-static bool bExtractCoreUrl(const char * pcUri, char *pcCoreUri);
+static BaseType_t bExtractCoreUrl(const char * pcUri, char *pcCoreUri);
 
-static bool bExtractTemplateVariable(char * pcDest, const char *pcSrc, const char *pcFind, int iFindSize);
+static BaseType_t bExtractTemplateVariable(char * pcDest, const char *pcSrc, const char *pcFind, int iFindSize);
 
 typedef enum
 {
@@ -63,7 +61,7 @@ void vHandleCoreHcProxyApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPa
         
         char cCoreUrl[100];
 
-        if (bExtractCoreUrl(pxClient->pcUrlData, cCoreUrl) == false)
+        if (bExtractCoreUrl(pxClient->pcUrlData, cCoreUrl))
         {
             // TODO parse core uri
         }
@@ -77,7 +75,7 @@ void vHandleCoreHcProxyApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPa
     }
 }
 
-static bool bExtractCoreUrl(const char * pcUri, char *pcCoreUri)
+static BaseType_t bExtractCoreUrl(const char * pcUri, char *pcCoreUri)
 {
     const char *pcNext;
     const char *pcCurrent = pcUri;
@@ -210,7 +208,7 @@ static void vUrlDecode(char *pcDst, const char *pcSrc)
     *pcDst++ = '\0';
 }
 
-static bool bExtractTemplateVariable(char * pcDest, const char *pcSrc, const char *pcFind, int iFindSize)
+static BaseType_t bExtractTemplateVariable(char * pcDest, const char *pcSrc, const char *pcFind, int iFindSize)
 {
     const char * pcStart = strstr(pcSrc, pcFind);
     

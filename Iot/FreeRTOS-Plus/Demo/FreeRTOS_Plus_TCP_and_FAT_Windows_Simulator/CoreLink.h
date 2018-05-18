@@ -24,4 +24,4 @@
 #define CORE_SIZE						"sz"
 #define CORE_HREF						"href" 
 
-#endif CORE_LINK_H
+#endif /* CORE_LINK_H */
