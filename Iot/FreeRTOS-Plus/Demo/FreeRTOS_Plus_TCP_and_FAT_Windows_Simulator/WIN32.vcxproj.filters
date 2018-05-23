@@ -96,6 +96,12 @@
     <Filter Include="Core\include">
       <UniqueIdentifier>{04ec3ee9-2cf6-4359-a36f-064b3dcaf942}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Device">
+      <UniqueIdentifier>{43ea9e6e-2e35-4996-a6eb-382c9e8c28f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device\include">
+      <UniqueIdentifier>{003cfc38-c2a7-4543-8e60-02ef4712e1d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\FreeRTOS\Source\portable\MSVC-MingW\port.c">
@@ -466,6 +472,9 @@
     </ClInclude>
     <ClInclude Include="MediaTypes.h">
       <Filter>ApiHandlers\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Device.h">
+      <Filter>Device\include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

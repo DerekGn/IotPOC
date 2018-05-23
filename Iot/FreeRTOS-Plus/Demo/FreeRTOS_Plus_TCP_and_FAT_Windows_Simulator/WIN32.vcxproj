@@ -261,6 +261,7 @@
     <ClInclude Include="..\..\Source\FreeRTOS-Plus-TCP\protocols\include\NTPDemo.h" />
     <ClInclude Include="ApiHandlers.h" />
     <ClInclude Include="CoreLink.h" />
+    <ClInclude Include="Device.h" />
     <ClInclude Include="FreeRTOSConfig.h" />
     <ClInclude Include="FreeRTOSFATConfig.h" />
     <ClInclude Include="FreeRTOSIPConfig.h" />
