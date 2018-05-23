@@ -14,6 +14,7 @@
 *
 */
 
+// Units as defined in https://tools.ietf.org/html/draft-ietf-core-senml-16
 #ifndef SENML_UNITS_H
 #define SENML_UNITS_H
 

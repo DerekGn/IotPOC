@@ -28,7 +28,7 @@
 
 #include "jsmn.h"
 #include "Json.h"
-#include "HttpCoap.h"
+#include "CoapHttp.h"
 #include "CoreLink.h"
 #include "MediaTypes.h"
 #include "ApiHandlers.h"
@@ -36,6 +36,8 @@
 BaseType_t bValidQuery(const char *pcUrlData, BaseType_t bHRef, BaseType_t bAttribute);
 
 BaseType_t bIsProxyDiscovery(const char *pcUrlData);
+
+void vAddHcProxyAnchor(JsonGenerator_t *jsonGenerator);
 
 // Filtering may be performed on any of the link format attributes [GET /.well-known/core?rt=temperature-c] 
 // 4.1.  Query Filtering /.well-known/core{?search*}
@@ -52,28 +54,22 @@ BaseType_t bAttribute = pdFALSE;
     case ECMD_GET:
         FreeRTOS_debug_printf(("%s: Handling GET\n", __func__));
         
-		if (bIsProxyDiscovery(pxClient->pcUrlData))
-		{
+		//if (bIsProxyDiscovery(pxClient->pcUrlData))
+		//{
 			JsonGenerator_t xGenerator;
 
 			vJsonInit(&xGenerator, pxClient->pxParent->pcCommandBuffer, sizeof(pxClient->pxParent->pcCommandBuffer));
+			
 			vJsonAddValue(&xGenerator, eArray, "");
-			vJsonAddValue(&xGenerator, eObject, "");
-			vJsonOpenKey(&xGenerator, CORE_HREF);
-			vJsonAddValue(&xGenerator, eString, "/hc/");
-			vJsonCloseNode(&xGenerator, eString);
-			vJsonOpenKey(&xGenerator, CORE_RESOURCE_TYPE);
-			vJsonAddValue(&xGenerator, eString, CORE_HTTP_CORE_RT);
-			vJsonCloseNode(&xGenerator, eObject);
+			vAddHcProxyAnchor(&xGenerator);
 			vJsonCloseNode(&xGenerator, eArray);
 
 			xCode = WEB_REPLY_OK;
 			xSendApiResponse(pxClient, MEDIA_TYPE_APP_LINK_FORMAT_JSON);
-		}
-		else if(bValidQuery(pxClient->pcUrlData, bHRef, bAttribute))
-		{
-
-		}
+		//}
+		//else if(bValidQuery(pxClient->pcUrlData, bHRef, bAttribute))
+		//{
+		//}
 
         break;
     }
@@ -84,12 +80,26 @@ BaseType_t bAttribute = pdFALSE;
     }
 }
 
-BaseType_t bValidQuery( const char *pcUrlData, BaseType_t bHRef, BaseType_t bAttribute )
-{
-	return pdFALSE;
-}
+//BaseType_t bValidQuery( const char *pcUrlData, BaseType_t bHRef, BaseType_t bAttribute )
+//{
+//	return pdFALSE;
+//}
 
-BaseType_t bIsProxyDiscovery(const char *pcUrlData)
+//BaseType_t bIsProxyDiscovery(const char *pcUrlData)
+//{
+//	return strstr(pcUrlData, "?rt=core.hc") != NULL;
+//}
+
+void vAddHcProxyAnchor(JsonGenerator_t *jsonGenerator)
 {
-	return strstr(pcUrlData, "?rt=core.hc") != NULL;
+	vJsonAddValue(jsonGenerator, eObject, "");
+	vJsonOpenKey(jsonGenerator, CORE_HREF);
+	vJsonAddValue(jsonGenerator, eString, "/hc/");
+	vJsonCloseNode(jsonGenerator, eString);
+	vJsonOpenKey(jsonGenerator, CORE_RESOURCE_TYPE);
+	vJsonAddValue(jsonGenerator, eString, COAP_HTTP_PROXY_RESOURCE_TYPE);
+	vJsonCloseNode(jsonGenerator, eString);
+	vJsonOpenKey(jsonGenerator, COAP_HTTP_URI_TEMPLATE_ATTRIBUTE);
+	vJsonAddValue(jsonGenerator, eString, COAP_HTTP_URI_MAPPING_TEMPLATE);
+	vJsonCloseNode(jsonGenerator, eObject);
 }

@@ -260,6 +260,7 @@
     <ClInclude Include="..\..\Source\FreeRTOS-Plus-TCP\protocols\include\NTPClient.h" />
     <ClInclude Include="..\..\Source\FreeRTOS-Plus-TCP\protocols\include\NTPDemo.h" />
     <ClInclude Include="ApiHandlers.h" />
+    <ClInclude Include="CoreIntreface.h" />
     <ClInclude Include="CoreLink.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="FreeRTOSConfig.h" />
@@ -267,7 +268,7 @@
     <ClInclude Include="FreeRTOSIPConfig.h" />
     <ClInclude Include="FreeRTOS_HTTP_io.h" />
     <ClInclude Include="FreeRTOS_HTTP_pipeline.h" />
-    <ClInclude Include="HttpCoap.h" />
+    <ClInclude Include="CoapHttp.h" />
     <ClInclude Include="jsmn.h" />
     <ClInclude Include="Json.h" />
     <ClInclude Include="MediaTypes.h" />

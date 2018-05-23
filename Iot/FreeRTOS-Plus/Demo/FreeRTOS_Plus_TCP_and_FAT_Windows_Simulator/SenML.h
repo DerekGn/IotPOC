@@ -17,6 +17,8 @@
 #ifndef SENML_H
 #define SENML_H
 
+// Units as defined in https://tools.ietf.org/html/draft-ietf-core-senml-16
+
 #include <stdint.h>
 
 #include "SenMLUnits.h"

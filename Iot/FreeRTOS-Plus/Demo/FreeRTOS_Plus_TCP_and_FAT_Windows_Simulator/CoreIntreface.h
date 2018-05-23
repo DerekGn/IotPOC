@@ -14,11 +14,17 @@
 *
 */
 
-#ifndef CORE_HTTP_H
-#define CORE_HTTP_H
+// Definitions for https://tools.ietf.org/html/draft-ietf-core-interfaces-11
 
-#define CORE_HTTP_CORE_RT				"core.hc"
-//#define CORE_HTTP_COAP_FORMATPARAM		"cf"
-//#define CORE_HTTP_TARGET_ATTRIBUTE		"hct"
+#ifndef CORE_INTERFACE_H
+#define CORE_INTERFACE_H
 
-#endif /* CORE_HTTP_H */
+#define CORE_INTERFACE_TYPE_LINK_LIST		"core.ll"
+#define CORE_INTERFACE_TYPE_LINK_BATCH		"core.lb"
+#define CORE_INTERFACE_TYPE_SENSOR			"core.s"
+#define CORE_INTERFACE_TYPE_BATCH			"core.b"
+#define CORE_INTERFACE_TYPE_PARAM			"core.p"
+#define CORE_INTERFACE_TYPE_PARAM_RO		"core.rp"
+#define CORE_INTERFACE_TYPE_ACTUATOR		"core.a"
+
+#endif /* CORE_INTERFACE_H */

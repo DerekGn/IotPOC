@@ -102,6 +102,12 @@
     <Filter Include="Device\include">
       <UniqueIdentifier>{003cfc38-c2a7-4543-8e60-02ef4712e1d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Coap">
+      <UniqueIdentifier>{b3744565-97d1-4958-bf12-97af0847a751}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Coap\include">
+      <UniqueIdentifier>{377a8473-f0c1-432c-97fa-28fb0d0dc10a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\FreeRTOS\Source\portable\MSVC-MingW\port.c">
@@ -467,14 +473,17 @@
     <ClInclude Include="CoreLink.h">
       <Filter>Core\include</Filter>
     </ClInclude>
-    <ClInclude Include="HttpCoap.h">
-      <Filter>Core\include</Filter>
-    </ClInclude>
     <ClInclude Include="MediaTypes.h">
       <Filter>ApiHandlers\include</Filter>
     </ClInclude>
     <ClInclude Include="Device.h">
       <Filter>Device\include</Filter>
+    </ClInclude>
+    <ClInclude Include="CoapHttp.h">
+      <Filter>Core\include</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreIntreface.h">
+      <Filter>Core\include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
