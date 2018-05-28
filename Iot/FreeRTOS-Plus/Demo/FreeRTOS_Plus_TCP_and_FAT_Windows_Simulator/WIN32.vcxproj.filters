@@ -485,5 +485,8 @@
     <ClInclude Include="CoreIntreface.h">
       <Filter>Core\include</Filter>
     </ClInclude>
+    <ClInclude Include="CoreResourceDirectory.h">
+      <Filter>Core\include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

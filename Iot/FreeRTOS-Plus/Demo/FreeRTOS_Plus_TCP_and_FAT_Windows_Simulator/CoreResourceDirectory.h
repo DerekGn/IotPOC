@@ -14,15 +14,19 @@
 *
 */
 
-#ifndef COAP_HTTP_H
-#define COAP_HTTP_H
+#ifndef CORE_RESRC_DIR_H
+#define CORE_RESRC_DIR_H
 
-#define COAP_HTTP_PROXY_HREF					"/hc/"
-#define COAP_HTTP_PROXY_RESOURCE_TYPE			"core.hc"
-#define COAP_HTTP_URI_TEMPLATE_ATTRIBUTE		"hct"
+#define CORE_RESRC_DIR_HREF					"/rd"
+#define CORE_RESRC_DIR_GRP_HREF				"/rd-group"
+#define CORE_RESRC_DIR_LU_EP_HREF			"/rd-lookup/ep"
+#define CORE_RESRC_DIR_LU_RES_HREF			"/rd-lookup/res"
+#define CORE_RESRC_DIR_LU_GRP_HREF			"/rd-lookup/gp"
 
-#define COAP_HTTP_URI_MAPPING_TEMPLATE			 "?target_uri={+tu}"
+#define CORE_RESRC_DIR_RT_RES_DIR			"core.rd"
+#define CORE_RESRC_DIR_RT_LOOKUP_RES		"core.rd-lookup-res"
+#define CORE_RESRC_DIR_RT_LOOKUP_GRP		"core.rd-lookup-gp"
+#define CORE_RESRC_DIR_RT_LOOKUP_EP			"core.rd-lookup-ep"
+#define CORE_RESRC_DIR_RT_GROUP				"core.rd-group"
 
-#define COAP_HTTP_CONTENT_TYPE_ATTR				"ct="
-
-#endif /* COAP_HTTP_H */
+#endif /* CORE_RESRC_DIR_H */

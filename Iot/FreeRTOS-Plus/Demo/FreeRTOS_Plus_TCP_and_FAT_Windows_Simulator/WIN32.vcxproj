@@ -262,6 +262,7 @@
     <ClInclude Include="ApiHandlers.h" />
     <ClInclude Include="CoreIntreface.h" />
     <ClInclude Include="CoreLink.h" />
+    <ClInclude Include="CoreResourceDirectory.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="FreeRTOSConfig.h" />
     <ClInclude Include="FreeRTOSFATConfig.h" />

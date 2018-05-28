@@ -26,6 +26,7 @@ void vJsonInit(JsonGenerator_t *pxGenerator, char *pcBuffer, BaseType_t xBufferS
 {
     pxGenerator->pcBuffer = pcBuffer;
     pxGenerator->pcBuffer[0] = '\0';
+	pxGenerator->xBufferSize = xBufferSize;
 }
 
 void vJsonOpenKey(JsonGenerator_t *pxGenerator, const char * pcName)
