@@ -28,6 +28,7 @@
 
 #include "jsmn.h"
 #include "Json.h"
+#include "Coap.h"
 #include "CoapHttp.h"
 #include "CoreLink.h"
 #include "MediaTypes.h"
@@ -128,7 +129,7 @@ void vAddRdAnchor(JsonGenerator_t * jsonGenerator)
 	vJsonAddValue(jsonGenerator, eString, CORE_RESRC_DIR_RT_RES_DIR);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, COAP_HTTP_CONTENT_TYPE_ATTR);
-	vJsonAddValue(jsonGenerator, eNumber, "40");
+	vJsonAddValue(jsonGenerator, eNumber, COAP_CONTENT_TYPE_APP_LINK_FORMAT);
 	vJsonCloseNode(jsonGenerator, eObject);
 }
 
@@ -142,7 +143,7 @@ void vAddRdGroupAnchor(JsonGenerator_t * jsonGenerator)
 	vJsonAddValue(jsonGenerator, eString, CORE_RESRC_DIR_RT_GROUP);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, COAP_HTTP_CONTENT_TYPE_ATTR);
-	vJsonAddValue(jsonGenerator, eNumber, "40");
+	vJsonAddValue(jsonGenerator, eNumber, COAP_CONTENT_TYPE_APP_LINK_FORMAT);
 	vJsonCloseNode(jsonGenerator, eObject);
 }
 
@@ -156,7 +157,7 @@ void vAddRdLookupEndpointAnchor(JsonGenerator_t * jsonGenerator)
 	vJsonAddValue(jsonGenerator, eString, CORE_RESRC_DIR_RT_LOOKUP_EP);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, COAP_HTTP_CONTENT_TYPE_ATTR);
-	vJsonAddValue(jsonGenerator, eNumber, "40");
+	vJsonAddValue(jsonGenerator, eNumber, COAP_CONTENT_TYPE_APP_LINK_FORMAT);
 	vJsonCloseNode(jsonGenerator, eObject);
 }
 
@@ -170,7 +171,7 @@ void vAddRdLookupGroupAnchor(JsonGenerator_t * jsonGenerator)
 	vJsonAddValue(jsonGenerator, eString, CORE_RESRC_DIR_RT_LOOKUP_GRP);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, COAP_HTTP_CONTENT_TYPE_ATTR);
-	vJsonAddValue(jsonGenerator, eNumber, "40");
+	vJsonAddValue(jsonGenerator, eNumber, COAP_CONTENT_TYPE_APP_LINK_FORMAT);
 	vJsonCloseNode(jsonGenerator, eObject);
 }
 
@@ -184,6 +185,6 @@ void vAddRdLookupResourceAnchor(JsonGenerator_t * jsonGenerator)
 	vJsonAddValue(jsonGenerator, eString, CORE_RESRC_DIR_RT_LOOKUP_RES);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, COAP_HTTP_CONTENT_TYPE_ATTR);
-	vJsonAddValue(jsonGenerator, eNumber, "40");
+	vJsonAddValue(jsonGenerator, eNumber, COAP_CONTENT_TYPE_APP_LINK_FORMAT);
 	vJsonCloseNode(jsonGenerator, eObject);
 }

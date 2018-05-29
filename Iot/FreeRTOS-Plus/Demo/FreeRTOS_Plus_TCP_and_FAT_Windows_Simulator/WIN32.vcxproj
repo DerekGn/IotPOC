@@ -260,6 +260,7 @@
     <ClInclude Include="..\..\Source\FreeRTOS-Plus-TCP\protocols\include\NTPClient.h" />
     <ClInclude Include="..\..\Source\FreeRTOS-Plus-TCP\protocols\include\NTPDemo.h" />
     <ClInclude Include="ApiHandlers.h" />
+    <ClInclude Include="Coap.h" />
     <ClInclude Include="CoreIntreface.h" />
     <ClInclude Include="CoreLink.h" />
     <ClInclude Include="CoreResourceDirectory.h" />

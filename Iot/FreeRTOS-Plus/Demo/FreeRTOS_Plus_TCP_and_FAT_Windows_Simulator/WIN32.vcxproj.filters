@@ -488,5 +488,8 @@
     <ClInclude Include="CoreResourceDirectory.h">
       <Filter>Core\include</Filter>
     </ClInclude>
+    <ClInclude Include="Coap.h">
+      <Filter>Coap\include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
