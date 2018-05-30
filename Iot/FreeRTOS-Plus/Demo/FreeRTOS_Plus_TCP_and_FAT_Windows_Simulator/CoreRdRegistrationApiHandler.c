@@ -14,15 +14,36 @@
 *
 */
 
-#ifndef COAP_HTTP_H
-#define COAP_HTTP_H
+#include <FreeRTOS.h>
+#include "task.h"
 
-#define COAP_HTTP_PROXY_HREF					"/hc/"
-#define COAP_HTTP_PROXY_RT						"core.hc"
-#define COAP_HTTP_URI_TEMPLATE_ATTRIBUTE		"hct"
+/* FreeRTOS+TCP includes. */
+#include "FreeRTOS_IP.h"
+#include "FreeRTOS_Sockets.h"
+#include "FreeRTOS_TCP_server.h"
+#include "FreeRTOS_server_private.h"
 
-#define COAP_HTTP_URI_MAPPING_TEMPLATE			 "?target_uri={+tu}"
+#include "FreeRTOS_HTTP_io.h"
+#include "FreeRTOS_HTTP_commands.h"
 
-#define COAP_HTTP_CONTENT_TYPE_ATTR				"ct="
+#include "jsmn.h"
+#include "Json.h"
 
-#endif /* COAP_HTTP_H */
+void vHandleRdRegistrationApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount)
+{
+	BaseType_t xCode = WEB_BAD_REQUEST;
+
+	strcpy(pxClient->pxParent->pcExtraContents, "Content-Length: 0\r\n");
+
+	switch (xIndex)
+	{
+	case ECMD_POST:
+		FreeRTOS_debug_printf(("%s: Handling POST\n", __func__));
+		break;
+	}
+
+	if (xCode != WEB_REPLY_OK)
+	{
+		xSendReply(pxClient, xCode);
+	}
+}

@@ -303,6 +303,9 @@
     <ClCompile Include="CoreHcProxyDiscoApiHandler.c">
       <Filter>ApiHandlers</Filter>
     </ClCompile>
+    <ClCompile Include="CoreRdRegistrationApiHandler.c">
+      <Filter>ApiHandlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\FreeRTOS-Plus-TCP\include\NetworkInterface.h">
@@ -485,11 +488,11 @@
     <ClInclude Include="CoreIntreface.h">
       <Filter>Core\include</Filter>
     </ClInclude>
-    <ClInclude Include="CoreResourceDirectory.h">
-      <Filter>Core\include</Filter>
-    </ClInclude>
     <ClInclude Include="Coap.h">
       <Filter>Coap\include</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreRescDir.h">
+      <Filter>Core\include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

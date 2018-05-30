@@ -17,16 +17,20 @@
 #ifndef CORE_RESRC_DIR_H
 #define CORE_RESRC_DIR_H
 
-#define CORE_RESRC_DIR_HREF					"/rd"
-#define CORE_RESRC_DIR_GRP_HREF				"/rd-group"
-#define CORE_RESRC_DIR_LU_EP_HREF			"/rd-lookup/ep"
-#define CORE_RESRC_DIR_LU_RES_HREF			"/rd-lookup/res"
-#define CORE_RESRC_DIR_LU_GRP_HREF			"/rd-lookup/gp"
+#define CORE_RSRC_DIR_HREF					"/rd"
+#define CORE_RSRC_DIR_GRP_HREF				"/rd-group"
+#define CORE_RSRC_DIR_LU_EP_HREF			"/rd-lookup/ep"
+#define CORE_RSRC_DIR_LU_RES_HREF			"/rd-lookup/res"
+#define CORE_RSRC_DIR_LU_GRP_HREF			"/rd-lookup/gp"
 
-#define CORE_RESRC_DIR_RT_RES_DIR			"core.rd"
-#define CORE_RESRC_DIR_RT_LOOKUP_RES		"core.rd-lookup-res"
-#define CORE_RESRC_DIR_RT_LOOKUP_GRP		"core.rd-lookup-gp"
-#define CORE_RESRC_DIR_RT_LOOKUP_EP			"core.rd-lookup-ep"
-#define CORE_RESRC_DIR_RT_GROUP				"core.rd-group"
+#define CORE_RSRC_DIR_RT_RES_DIR			"core.rd"
+#define CORE_RSRC_DIR_RT_LOOKUP_RES			"core.rd-lookup-res"
+#define CORE_RSRC_DIR_RT_LOOKUP_GRP			"core.rd-lookup-gp"
+#define CORE_RSRC_DIR_RT_LOOKUP_EP			"core.rd-lookup-ep"
+#define CORE_RSRC_DIR_RT_GROUP				"core.rd-group"
+
+#define CORE_RSRC_DIR_RES_DIR_MATCH			"core.rd*"
+#define CORE_RSRC_DIR_LOOKUP_MATCH			"core.rd-lookup*"
 
 #endif /* CORE_RESRC_DIR_H */
+

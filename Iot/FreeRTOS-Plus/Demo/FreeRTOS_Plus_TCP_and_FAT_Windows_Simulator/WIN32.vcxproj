@@ -185,6 +185,7 @@
     <ClCompile Include="ApiHttpHandler.c" />
     <ClCompile Include="CLI-commands.c" />
     <ClCompile Include="CoreHcProxyApiHandler.c" />
+    <ClCompile Include="CoreRdRegistrationApiHandler.c" />
     <ClCompile Include="DemoTasks\TCPEchoClient_SeparateTasks.c" />
     <ClCompile Include="DemoTasks\TCPEchoClient_SingleTasks.c" />
     <ClCompile Include="DemoTasks\TwoUDPEchoClients.c" />
@@ -263,7 +264,7 @@
     <ClInclude Include="Coap.h" />
     <ClInclude Include="CoreIntreface.h" />
     <ClInclude Include="CoreLink.h" />
-    <ClInclude Include="CoreResourceDirectory.h" />
+    <ClInclude Include="CoreRescDir.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="FreeRTOSConfig.h" />
     <ClInclude Include="FreeRTOSFATConfig.h" />

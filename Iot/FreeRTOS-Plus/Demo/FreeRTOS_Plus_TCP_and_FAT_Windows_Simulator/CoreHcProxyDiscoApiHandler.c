@@ -26,6 +26,8 @@
 #include "FreeRTOS_HTTP_io.h"
 #include "FreeRTOS_HTTP_commands.h"
 
+#include <string.h>
+
 #include "jsmn.h"
 #include "Json.h"
 #include "Coap.h"
@@ -33,7 +35,20 @@
 #include "CoreLink.h"
 #include "MediaTypes.h"
 #include "ApiHandlers.h"
-#include "CoreResourceDirectory.h"
+#include "CoreRescDir.h"
+
+typedef enum
+{
+	eAll = 0x3F,
+	eResDir = 1,
+	eGroup = 2,
+	eLookupResources = 4,
+	eLookupEndpoint = 8,
+	eLookupGroup = 16,
+	eHttpProxy = 32
+} eResourceTypeQuery_t;
+
+eResourceTypeQuery_t xExtractQuery(const char *pcUrlData);
 
 void vAddRdAnchor(JsonGenerator_t *jsonGenerator);
 void vAddRdGroupAnchor(JsonGenerator_t *jsonGenerator);
@@ -45,8 +60,6 @@ void vAddRdLookupResourceAnchor(JsonGenerator_t * jsonGenerator);
 void vHandleHcProxyDiscoApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount)
 {
 BaseType_t xCode = WEB_BAD_REQUEST;
-BaseType_t bHRef = pdFALSE;
-BaseType_t bAttribute = pdFALSE;
 
     strcpy(pxClient->pxParent->pcExtraContents, "Content-Length: 0\r\n");
 
@@ -55,46 +68,60 @@ BaseType_t bAttribute = pdFALSE;
     case ECMD_GET:
         FreeRTOS_debug_printf(("%s: Handling GET\n", __func__));
         
-		//bIsQuerySpecified();
+		eResourceTypeQuery_t query = xExtractQuery(pxClient->pcUrlData);
+		
+		JsonGenerator_t xGenerator;
 
-		//if (bIsProxyDiscovery(pxClient->pcUrlData))
-		//{
-			JsonGenerator_t xGenerator;
+		vJsonInit(&xGenerator, pxClient->pxParent->pcCommandBuffer, sizeof(pxClient->pxParent->pcCommandBuffer));
+		vJsonAddValue(&xGenerator, eArray, "");
 
-			vJsonInit(&xGenerator, pxClient->pxParent->pcCommandBuffer, sizeof(pxClient->pxParent->pcCommandBuffer));
-			
-			vJsonAddValue(&xGenerator, eArray, "");
-
+		if((query & eHttpProxy) == eHttpProxy)
 			vAddHcProxyAnchor(&xGenerator);
-			
-			vJsonCloseNode(&xGenerator, eValue);
-			
-			vAddRdAnchor(&xGenerator);
+		
+		if ((query & eResDir) == eResDir)
+		{
+			if ((query & eHttpProxy) == eHttpProxy)
+				vJsonCloseNode(&xGenerator, eValue);
 
-			vJsonCloseNode(&xGenerator, eValue);
+			vAddRdAnchor(&xGenerator);
+		}
+		
+		if ((query & eLookupEndpoint) == eLookupEndpoint)
+		{
+			if ((query & eResDir) == eResDir)
+				vJsonCloseNode(&xGenerator, eValue);
 
 			vAddRdLookupEndpointAnchor(&xGenerator);
-
-			vJsonCloseNode(&xGenerator, eValue);
+		}
+		
+		if ((query & eLookupResources) == eLookupResources)
+		{
+			if ((query & eLookupEndpoint) == eLookupEndpoint)
+				vJsonCloseNode(&xGenerator, eValue);
 
 			vAddRdLookupResourceAnchor(&xGenerator);
-
-			vJsonCloseNode(&xGenerator, eValue);
-
-			vAddRdLookupGroupAnchor(&xGenerator);
-
-			vJsonCloseNode(&xGenerator, eValue);
-
-			vAddRdGroupAnchor(&xGenerator);
+		}
+		
+		if ((query & eLookupGroup) == eLookupGroup)
+		{
+			if ((query & eLookupResources) == eLookupResources)
+				vJsonCloseNode(&xGenerator, eValue);
 			
-			vJsonCloseNode(&xGenerator, eArray);
+			vAddRdLookupGroupAnchor(&xGenerator);
+		}
+		
+		if ((query & eGroup) == eGroup)
+		{
+			if ((query & eLookupGroup) == eLookupGroup)
+				vJsonCloseNode(&xGenerator, eValue);
+			
+			vAddRdGroupAnchor(&xGenerator);
+		}
 
-			xCode = WEB_REPLY_OK;
-			xSendApiResponse(pxClient, MEDIA_TYPE_APP_LINK_FORMAT_JSON);
-		//}
-		//else if(bValidQuery(pxClient->pcUrlData, bHRef, bAttribute))
-		//{
-		//}
+		vJsonCloseNode(&xGenerator, eArray);
+
+		xCode = WEB_REPLY_OK;
+		xSendApiResponse(pxClient, MEDIA_TYPE_APP_LINK_FORMAT_JSON);
 
         break;
     }
@@ -112,7 +139,7 @@ void vAddHcProxyAnchor(JsonGenerator_t *jsonGenerator)
 	vJsonAddValue(jsonGenerator, eString, COAP_HTTP_PROXY_HREF);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, CORE_RESOURCE_TYPE);
-	vJsonAddValue(jsonGenerator, eString, COAP_HTTP_PROXY_RESOURCE_TYPE);
+	vJsonAddValue(jsonGenerator, eString, COAP_HTTP_PROXY_RT);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, COAP_HTTP_URI_TEMPLATE_ATTRIBUTE);
 	vJsonAddValue(jsonGenerator, eString, COAP_HTTP_URI_MAPPING_TEMPLATE);
@@ -123,10 +150,10 @@ void vAddRdAnchor(JsonGenerator_t * jsonGenerator)
 {
 	vJsonAddValue(jsonGenerator, eObject, "");
 	vJsonOpenKey(jsonGenerator, CORE_HREF);
-	vJsonAddValue(jsonGenerator, eString, CORE_RESRC_DIR_HREF);
+	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_HREF);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, CORE_RESOURCE_TYPE);
-	vJsonAddValue(jsonGenerator, eString, CORE_RESRC_DIR_RT_RES_DIR);
+	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_RT_RES_DIR);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, COAP_HTTP_CONTENT_TYPE_ATTR);
 	vJsonAddValue(jsonGenerator, eNumber, COAP_CONTENT_TYPE_APP_LINK_FORMAT);
@@ -137,10 +164,10 @@ void vAddRdGroupAnchor(JsonGenerator_t * jsonGenerator)
 {
 	vJsonAddValue(jsonGenerator, eObject, "");
 	vJsonOpenKey(jsonGenerator, CORE_HREF);
-	vJsonAddValue(jsonGenerator, eString, CORE_RESRC_DIR_GRP_HREF);
+	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_GRP_HREF);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, CORE_RESOURCE_TYPE);
-	vJsonAddValue(jsonGenerator, eString, CORE_RESRC_DIR_RT_GROUP);
+	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_RT_GROUP);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, COAP_HTTP_CONTENT_TYPE_ATTR);
 	vJsonAddValue(jsonGenerator, eNumber, COAP_CONTENT_TYPE_APP_LINK_FORMAT);
@@ -151,10 +178,10 @@ void vAddRdLookupEndpointAnchor(JsonGenerator_t * jsonGenerator)
 {
 	vJsonAddValue(jsonGenerator, eObject, "");
 	vJsonOpenKey(jsonGenerator, CORE_HREF);
-	vJsonAddValue(jsonGenerator, eString, CORE_RESRC_DIR_LU_EP_HREF);
+	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_LU_EP_HREF);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, CORE_RESOURCE_TYPE);
-	vJsonAddValue(jsonGenerator, eString, CORE_RESRC_DIR_RT_LOOKUP_EP);
+	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_RT_LOOKUP_EP);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, COAP_HTTP_CONTENT_TYPE_ATTR);
 	vJsonAddValue(jsonGenerator, eNumber, COAP_CONTENT_TYPE_APP_LINK_FORMAT);
@@ -165,10 +192,10 @@ void vAddRdLookupGroupAnchor(JsonGenerator_t * jsonGenerator)
 {
 	vJsonAddValue(jsonGenerator, eObject, "");
 	vJsonOpenKey(jsonGenerator, CORE_HREF);
-	vJsonAddValue(jsonGenerator, eString, CORE_RESRC_DIR_LU_GRP_HREF);
+	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_LU_GRP_HREF);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, CORE_RESOURCE_TYPE);
-	vJsonAddValue(jsonGenerator, eString, CORE_RESRC_DIR_RT_LOOKUP_GRP);
+	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_RT_LOOKUP_GRP);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, COAP_HTTP_CONTENT_TYPE_ATTR);
 	vJsonAddValue(jsonGenerator, eNumber, COAP_CONTENT_TYPE_APP_LINK_FORMAT);
@@ -179,12 +206,43 @@ void vAddRdLookupResourceAnchor(JsonGenerator_t * jsonGenerator)
 {
 	vJsonAddValue(jsonGenerator, eObject, "");
 	vJsonOpenKey(jsonGenerator, CORE_HREF);
-	vJsonAddValue(jsonGenerator, eString, CORE_RESRC_DIR_LU_RES_HREF);
+	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_LU_RES_HREF);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, CORE_RESOURCE_TYPE);
-	vJsonAddValue(jsonGenerator, eString, CORE_RESRC_DIR_RT_LOOKUP_RES);
+	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_RT_LOOKUP_RES);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, COAP_HTTP_CONTENT_TYPE_ATTR);
 	vJsonAddValue(jsonGenerator, eNumber, COAP_CONTENT_TYPE_APP_LINK_FORMAT);
 	vJsonCloseNode(jsonGenerator, eObject);
+}
+
+eResourceTypeQuery_t xExtractQuery(const char * pcUrlData)
+{
+	eResourceTypeQuery_t result = eAll;
+
+	char *pcQuery = strstr(pcUrlData, "?rt=");
+
+	if (pcQuery != NULL)
+	{
+		pcQuery += 4;
+
+		if (strncmp(pcQuery, COAP_HTTP_PROXY_RT, strlen(COAP_HTTP_PROXY_RT)) == 0)
+			result = eHttpProxy;
+		else if (strncmp(pcQuery, CORE_RSRC_DIR_LOOKUP_MATCH, strlen(CORE_RSRC_DIR_LOOKUP_MATCH)) == 0)
+			result = eLookupResources | eLookupEndpoint | eLookupGroup;
+		else if (strncmp(pcQuery, CORE_RSRC_DIR_RES_DIR_MATCH, strlen(CORE_RSRC_DIR_RES_DIR_MATCH)) == 0)
+			result = eResDir | eGroup | eLookupResources | eLookupEndpoint | eLookupGroup;
+		else if (strncmp(pcQuery, CORE_RSRC_DIR_RT_LOOKUP_RES, strlen(CORE_RSRC_DIR_RT_LOOKUP_RES)) == 0)
+			result = eLookupResources;
+		else if (strncmp(pcQuery, CORE_RSRC_DIR_RT_LOOKUP_GRP, strlen(CORE_RSRC_DIR_RT_LOOKUP_GRP)) == 0)
+			result = eLookupGroup;
+		else if (strncmp(pcQuery, CORE_RSRC_DIR_RT_LOOKUP_EP, strlen(CORE_RSRC_DIR_RT_LOOKUP_EP)) == 0)
+			result = eLookupEndpoint;
+		else if (strncmp(pcQuery, CORE_RSRC_DIR_RT_GROUP, strlen(CORE_RSRC_DIR_RT_GROUP)) == 0)
+			result = eGroup;
+		else if (strncmp(pcQuery, CORE_RSRC_DIR_RT_RES_DIR, strlen(CORE_RSRC_DIR_RT_RES_DIR)) == 0)
+			result = eResDir;
+	}
+
+	return result;
 }

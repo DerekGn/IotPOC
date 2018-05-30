@@ -17,6 +17,6 @@
 #ifndef COAP_H
 #define COAP_H
 
-#define COAP_CONTENT_TYPE_APP_LINK_FORMAT	40
+#define COAP_CONTENT_TYPE_APP_LINK_FORMAT	"40"
 
 #endif /* COAP_H */
