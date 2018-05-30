@@ -27,7 +27,7 @@ extern void vHandleNetworkApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *p
 
 extern void vHandleRadioApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount);
 
-extern void vHandleHcProxyDiscoApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount);
+extern void vHandleWellKnownApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount);
 
 extern void vHandleCoreHcProxyApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount);
 
@@ -37,7 +37,7 @@ ApiHandler_t xApiHandlers[] =
     { 8, "/network", vHandleNetworkApi },
     { 5, "/radio", vHandleRadioApi },
     { 4, "/hc/", vHandleCoreHcProxyApi },
-    { 17, "/.well-known/core", vHandleHcProxyDiscoApi }
+    { 17, "/.well-known/core", vHandleWellKnownApi }
 };
 
 BaseType_t xApiHandlerEntries( void )

@@ -57,7 +57,7 @@ void vAddRdLookupGroupAnchor(JsonGenerator_t * jsonGenerator);
 void vAddRdLookupEndpointAnchor(JsonGenerator_t * jsonGenerator);
 void vAddRdLookupResourceAnchor(JsonGenerator_t * jsonGenerator);
 
-void vHandleHcProxyDiscoApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount)
+void vHandleWellKnownApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount)
 {
 BaseType_t xCode = WEB_BAD_REQUEST;
 

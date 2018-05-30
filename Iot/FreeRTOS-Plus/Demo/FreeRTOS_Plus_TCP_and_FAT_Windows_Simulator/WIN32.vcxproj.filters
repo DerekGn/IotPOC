@@ -300,10 +300,10 @@
     <ClCompile Include="CoreHcProxyApiHandler.c">
       <Filter>ApiHandlers</Filter>
     </ClCompile>
-    <ClCompile Include="CoreHcProxyDiscoApiHandler.c">
+    <ClCompile Include="CoreRdRegistrationApiHandler.c">
       <Filter>ApiHandlers</Filter>
     </ClCompile>
-    <ClCompile Include="CoreRdRegistrationApiHandler.c">
+    <ClCompile Include="CoreHcWellKnownApiHandler.c">
       <Filter>ApiHandlers</Filter>
     </ClCompile>
   </ItemGroup>
