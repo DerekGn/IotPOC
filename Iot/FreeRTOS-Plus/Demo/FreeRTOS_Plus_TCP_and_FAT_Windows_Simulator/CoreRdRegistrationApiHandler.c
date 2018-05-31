@@ -37,12 +37,24 @@ void vHandleRdRegistrationApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *p
 
 	switch (xIndex)
 	{
+	case ECMD_GET:
+		FreeRTOS_debug_printf(("%s: Handling GET\n", __func__));
+		// 
+		break;
 	case ECMD_POST:
 		FreeRTOS_debug_printf(("%s: Handling POST\n", __func__));
+		// https://tools.ietf.org/html/draft-ietf-core-resource-directory-13#section-5.4.1
+		
+		// Check the content format
+
+		break;
+	case ECMD_DELETE:
+		FreeRTOS_debug_printf(("%s: Handling DELETE\n", __func__));
+		// https://tools.ietf.org/html/draft-ietf-core-resource-directory-13#section-5.4.2
 		break;
 	}
 
-	if (xCode != WEB_REPLY_OK)
+	if (xCode != WEB_REPLY_CREATED)
 	{
 		xSendReply(pxClient, xCode);
 	}

@@ -185,6 +185,10 @@
     <ClCompile Include="ApiHttpHandler.c" />
     <ClCompile Include="CLI-commands.c" />
     <ClCompile Include="CoreHcProxyApiHandler.c" />
+    <ClCompile Include="CoreRdGroupApiHandler.c" />
+    <ClCompile Include="CoreRdLookupEpApiHandler.c" />
+    <ClCompile Include="CoreRdLookupGpApiHandler.c" />
+    <ClCompile Include="CoreRdLookupResApiHandler.c" />
     <ClCompile Include="CoreRdRegistrationApiHandler.c" />
     <ClCompile Include="DemoTasks\TCPEchoClient_SeparateTasks.c" />
     <ClCompile Include="DemoTasks\TCPEchoClient_SingleTasks.c" />

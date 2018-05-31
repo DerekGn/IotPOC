@@ -306,6 +306,18 @@
     <ClCompile Include="CoreHcWellKnownApiHandler.c">
       <Filter>ApiHandlers</Filter>
     </ClCompile>
+    <ClCompile Include="CoreRdGroupApiHandler.c">
+      <Filter>ApiHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="CoreRdLookupEpApiHandler.c">
+      <Filter>ApiHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="CoreRdLookupResApiHandler.c">
+      <Filter>ApiHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="CoreRdLookupGpApiHandler.c">
+      <Filter>ApiHandlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\FreeRTOS-Plus-TCP\include\NetworkInterface.h">

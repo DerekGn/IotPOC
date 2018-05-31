@@ -14,29 +14,37 @@
 *
 */
 
-#ifndef CORE_RESRC_DIR_H
-#define CORE_RESRC_DIR_H
+#include <FreeRTOS.h>
+#include "task.h"
 
-#define CORE_RSRC_DIR_HREF					"/rd"
-#define CORE_RSRC_DIR_GRP_HREF				"/rd-group"
-#define CORE_RSRC_DIR_LU_EP_HREF			"/rd-lookup/ep"
-#define CORE_RSRC_DIR_LU_RES_HREF			"/rd-lookup/res"
-#define CORE_RSRC_DIR_LU_GRP_HREF			"/rd-lookup/gp"
+/* FreeRTOS+TCP includes. */
+#include "FreeRTOS_IP.h"
+#include "FreeRTOS_Sockets.h"
+#include "FreeRTOS_TCP_server.h"
+#include "FreeRTOS_server_private.h"
 
-#define CORE_RSRC_DIR_RT_RES_DIR			"core.rd"
-#define CORE_RSRC_DIR_RT_LOOKUP_RES			"core.rd-lookup-res"
-#define CORE_RSRC_DIR_RT_LOOKUP_GRP			"core.rd-lookup-gp"
-#define CORE_RSRC_DIR_RT_LOOKUP_EP			"core.rd-lookup-ep"
-#define CORE_RSRC_DIR_RT_GROUP				"core.rd-group"
+#include "FreeRTOS_HTTP_io.h"
+#include "FreeRTOS_HTTP_commands.h"
 
-#define CORE_RSRC_DIR_RES_DIR_MATCH			"core.rd*"
-#define CORE_RSRC_DIR_LOOKUP_MATCH			"core.rd-lookup*"
+#include "jsmn.h"
+#include "Json.h"
 
-#define CORE_RSRC_DIR_TEMPLATE_EXTRAATTR		"extra-attrs"
-#define CORE_RSRC_DIR_TEMPLATE_LOCATION			"location"
-#define CORE_RSRC_DIR_TEMPLATE_CONTEXT			"con"
-#define CORE_RSRC_DIR_TEMPLATE_LIFETIME			"lt"
+void vHandleRdLookupEpApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount)
+{
+	BaseType_t xCode = WEB_BAD_REQUEST;
 
+	strcpy(pxClient->pxParent->pcExtraContents, "Content-Length: 0\r\n");
 
-#endif /* CORE_RESRC_DIR_H */
+	switch (xIndex)
+	{
+	case ECMD_GET:
+		FreeRTOS_debug_printf(("%s: Handling GET\n", __func__));
+		// 
+		break;
+	}
 
+	if (xCode != WEB_REPLY_CREATED)
+	{
+		xSendReply(pxClient, xCode);
+	}
+}

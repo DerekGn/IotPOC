@@ -57,6 +57,10 @@ void vAddRdLookupGroupAnchor(JsonGenerator_t * jsonGenerator);
 void vAddRdLookupEndpointAnchor(JsonGenerator_t * jsonGenerator);
 void vAddRdLookupResourceAnchor(JsonGenerator_t * jsonGenerator);
 
+/*
+* Implements the core wellknown endpoint handling
+* https://tools.ietf.org/html/draft-ietf-core-resource-directory-13#section-5.2
+*/
 void vHandleWellKnownApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayload, jsmntok_t *pxTokens, BaseType_t xJsonTokenCount)
 {
 BaseType_t xCode = WEB_BAD_REQUEST;
@@ -65,6 +69,10 @@ BaseType_t xCode = WEB_BAD_REQUEST;
 
     switch (xIndex)
     {
+	case ECMD_POST:
+		FreeRTOS_debug_printf(("%s: Handling POST\n", __func__));
+		//TODO simple registration for https://tools.ietf.org/html/draft-ietf-core-resource-directory-13#section-5.3.1
+		break;
     case ECMD_GET:
         FreeRTOS_debug_printf(("%s: Handling GET\n", __func__));
         
