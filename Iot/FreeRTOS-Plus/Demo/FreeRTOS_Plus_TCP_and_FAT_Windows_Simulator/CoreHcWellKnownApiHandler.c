@@ -143,10 +143,10 @@ BaseType_t xCode = WEB_BAD_REQUEST;
 void vAddHcProxyAnchor(JsonGenerator_t *jsonGenerator)
 {
 	vJsonAddValue(jsonGenerator, eObject, "");
-	vJsonOpenKey(jsonGenerator, CORE_HREF);
+	vJsonOpenKey(jsonGenerator, CORE_LINK_HREF);
 	vJsonAddValue(jsonGenerator, eString, COAP_HTTP_PROXY_HREF);
 	vJsonCloseNode(jsonGenerator, eString);
-	vJsonOpenKey(jsonGenerator, CORE_RESOURCE_TYPE);
+	vJsonOpenKey(jsonGenerator, CORE_LINK_RESOURCE_TYPE);
 	vJsonAddValue(jsonGenerator, eString, COAP_HTTP_PROXY_RT);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, COAP_HTTP_URI_TEMPLATE_ATTRIBUTE);
@@ -157,10 +157,10 @@ void vAddHcProxyAnchor(JsonGenerator_t *jsonGenerator)
 void vAddRdAnchor(JsonGenerator_t * jsonGenerator)
 {
 	vJsonAddValue(jsonGenerator, eObject, "");
-	vJsonOpenKey(jsonGenerator, CORE_HREF);
+	vJsonOpenKey(jsonGenerator, CORE_LINK_HREF);
 	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_HREF);
 	vJsonCloseNode(jsonGenerator, eString);
-	vJsonOpenKey(jsonGenerator, CORE_RESOURCE_TYPE);
+	vJsonOpenKey(jsonGenerator, CORE_LINK_RESOURCE_TYPE);
 	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_RT_RES_DIR);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, COAP_HTTP_CONTENT_TYPE_ATTR);
@@ -171,10 +171,10 @@ void vAddRdAnchor(JsonGenerator_t * jsonGenerator)
 void vAddRdGroupAnchor(JsonGenerator_t * jsonGenerator)
 {
 	vJsonAddValue(jsonGenerator, eObject, "");
-	vJsonOpenKey(jsonGenerator, CORE_HREF);
+	vJsonOpenKey(jsonGenerator, CORE_LINK_HREF);
 	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_GRP_HREF);
 	vJsonCloseNode(jsonGenerator, eString);
-	vJsonOpenKey(jsonGenerator, CORE_RESOURCE_TYPE);
+	vJsonOpenKey(jsonGenerator, CORE_LINK_RESOURCE_TYPE);
 	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_RT_GROUP);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, COAP_HTTP_CONTENT_TYPE_ATTR);
@@ -185,10 +185,10 @@ void vAddRdGroupAnchor(JsonGenerator_t * jsonGenerator)
 void vAddRdLookupEndpointAnchor(JsonGenerator_t * jsonGenerator)
 {
 	vJsonAddValue(jsonGenerator, eObject, "");
-	vJsonOpenKey(jsonGenerator, CORE_HREF);
+	vJsonOpenKey(jsonGenerator, CORE_LINK_HREF);
 	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_LU_EP_HREF);
 	vJsonCloseNode(jsonGenerator, eString);
-	vJsonOpenKey(jsonGenerator, CORE_RESOURCE_TYPE);
+	vJsonOpenKey(jsonGenerator, CORE_LINK_RESOURCE_TYPE);
 	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_RT_LOOKUP_EP);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, COAP_HTTP_CONTENT_TYPE_ATTR);
@@ -199,10 +199,10 @@ void vAddRdLookupEndpointAnchor(JsonGenerator_t * jsonGenerator)
 void vAddRdLookupGroupAnchor(JsonGenerator_t * jsonGenerator)
 {
 	vJsonAddValue(jsonGenerator, eObject, "");
-	vJsonOpenKey(jsonGenerator, CORE_HREF);
+	vJsonOpenKey(jsonGenerator, CORE_LINK_HREF);
 	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_LU_GRP_HREF);
 	vJsonCloseNode(jsonGenerator, eString);
-	vJsonOpenKey(jsonGenerator, CORE_RESOURCE_TYPE);
+	vJsonOpenKey(jsonGenerator, CORE_LINK_RESOURCE_TYPE);
 	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_RT_LOOKUP_GRP);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, COAP_HTTP_CONTENT_TYPE_ATTR);
@@ -213,10 +213,10 @@ void vAddRdLookupGroupAnchor(JsonGenerator_t * jsonGenerator)
 void vAddRdLookupResourceAnchor(JsonGenerator_t * jsonGenerator)
 {
 	vJsonAddValue(jsonGenerator, eObject, "");
-	vJsonOpenKey(jsonGenerator, CORE_HREF);
+	vJsonOpenKey(jsonGenerator, CORE_LINK_HREF);
 	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_LU_RES_HREF);
 	vJsonCloseNode(jsonGenerator, eString);
-	vJsonOpenKey(jsonGenerator, CORE_RESOURCE_TYPE);
+	vJsonOpenKey(jsonGenerator, CORE_LINK_RESOURCE_TYPE);
 	vJsonAddValue(jsonGenerator, eString, CORE_RSRC_DIR_RT_LOOKUP_RES);
 	vJsonCloseNode(jsonGenerator, eString);
 	vJsonOpenKey(jsonGenerator, COAP_HTTP_CONTENT_TYPE_ATTR);

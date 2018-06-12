@@ -32,10 +32,17 @@
 #define CORE_RSRC_DIR_RES_DIR_MATCH			"core.rd*"
 #define CORE_RSRC_DIR_LOOKUP_MATCH			"core.rd-lookup*"
 
-#define CORE_RSRC_DIR_TEMPLATE_EXTRAATTR		"extra-attrs"
-#define CORE_RSRC_DIR_TEMPLATE_LOCATION			"location"
-#define CORE_RSRC_DIR_TEMPLATE_CONTEXT			"con"
-#define CORE_RSRC_DIR_TEMPLATE_LIFETIME			"lt"
+#define CORE_RSRC_DIR_TEMPLATE_EXTRAATTR	"extra-attrs"
+#define CORE_RSRC_DIR_TEMPLATE_LOCATION		"location"
+#define CORE_RSRC_DIR_TEMPLATE_CONTEXT		"con"
+#define CORE_RSRC_DIR_TEMPLATE_LIFETIME		"lt"
+
+#define CORE_RSRC_DIR_LT_MIN				"60"
+#define CORE_RSRC_DIR_LT_MAX				"4294967295"
+#define CORE_RSRC_DIR_LT_DFLT				"86400"
+
+#define CORE_RSRC_DIR_EP_MAX_LEN			"63"
+#define CORE_RSRC_DIR_DOMAIN_MAX_LEN		"63"
 
 
 #endif /* CORE_RESRC_DIR_H */

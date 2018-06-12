@@ -17,11 +17,15 @@
 #ifndef CORE_LINK_H
 #define CORE_LINK_H
 
-#define CORE_INTERFACE_DESCRIPTION		"if"
-#define CORE_RESOURCE_TYPE				"rt"
-#define CORE_CONTENT_FORMAT				"ct"
-#define CORE_TITLE						"title"
-#define CORE_SIZE						"sz"
-#define CORE_HREF						"href" 
+
+#define CORE_LINK_REL_TYPE			"rel"
+#define CORE_LINK_ANCHOR			"anchor"
+#define CORE_LINK_TITLE				"title"
+#define CORE_LINK_RESOURCE_TYPE		"rt"
+#define CORE_LINK_INTERFACE			"if"
+#define CORE_LINK_SIZE				"sz"
+#define CORE_LINK_CONTENT_FORMAT	"ct"
+#define CORE_LINK_HREF				"href"
+
 
 #endif /* CORE_LINK_H */

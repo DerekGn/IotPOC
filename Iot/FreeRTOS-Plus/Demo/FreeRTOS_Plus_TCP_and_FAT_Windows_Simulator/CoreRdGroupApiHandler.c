@@ -42,9 +42,13 @@ void vHandleRdGroupApi(HTTPClient_t *pxClient, BaseType_t xIndex, char *pcPayloa
 		
 		// Check the content format
 
+
+
 		break;
 	case ECMD_DELETE:
 		FreeRTOS_debug_printf(("%s: Handling DELETE\n", __func__));
+
+
 		break;
 	}
 
